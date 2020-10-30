@@ -18,7 +18,7 @@
 `git checkout branchname`
 
 **Pull changes from another branch**
-`git pull origin <branch name>
+`git pull origin <branch name>`
 
 
 ## Finally
