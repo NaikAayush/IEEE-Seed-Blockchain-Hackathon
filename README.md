@@ -4,8 +4,18 @@
 
 
 ## Important Git Commands
-### SAMYAK PLEASE FILL THIS because many of us dont know how to use git properly and commit to respective branches, etc. 
 
+**Make new branch and switch to it**
+`git checkout -b somename`
+
+**To push to new branch for the first time**
+`git push --set-upstream origin somename`
+
+**Push to branch second/other times**
+`git push`
+
+**Move to another branch**
+`git checkout branchname`
 
 ## Finally
 Let's play bois!!
