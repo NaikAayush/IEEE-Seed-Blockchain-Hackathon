@@ -17,5 +17,8 @@
 **Move to another branch**
 `git checkout branchname`
 
+**Pull changes from another branch**
+`git pull origin <branch name>`
+
 ## Finally
 Let's play bois!!
