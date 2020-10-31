@@ -11,6 +11,7 @@ import (
 // Seed structure
 type SeedInfo struct {
 	ID string `json:"ID"`
+	LotNumber string `json:"lotNumber"`
 	Owner	string `json:"owner"`
 	Crop	string `json:"crop"`
 	Variety	string `json:"variety"`
@@ -46,9 +47,11 @@ type SeedInfo struct {
 	NoOfTagsIssued string `json:"noOfTagsIssued"`
 	CetificateValidityInMonth string `json:"cetificateValidityInMonth"`
 
+	SourceDistributer string `json:"sourceDistributer"`
 	StoreHouseLocation string `json:"storeHouseLocation"`
 	HumidityOfStorage string `json:"humidityOfStorage"`
 	TemperatureOfStorage string `json:"temperatureOfStorage"`
+	OrderId string `json:"orderId"`
 
 	STLName string `json:"stlName"`
 	SamplePassed string `json:"samplePassed"`
@@ -75,11 +78,11 @@ type SeedUpdateTests struct {
 }
 
 type SeedUpdateDist struct {
-	SourceStoreHouse	string `json:"sourceStoreHouse"`
-	DestinationStoreHouse	string `json:"destinationStoreHouse"`
+	SourceDistributer string `json:"sourceDistributer"`
 	StoreHouseLocation string `json:"storeHouseLocation"`
 	HumidityOfStorage string `json:"humidityOfStorage"`
 	TemperatureOfStorage string `json:"temperatureOfStorage"`
+	OrderId string `json:"orderId"`
 }
 
 // SeedChaincode implementation of Chaincode
@@ -334,11 +337,11 @@ func (t *SeedChaincode) updateDist(stub shim.ChaincodeStubInterface, args []stri
 			return shim.Error("bad JSON in blockchain")
 		}
 
-		data.SourceStoreHouse = updateData.SourceStoreHouse
-		data.DestinationStoreHouse = updateData.DestinationStoreHouse
+		data.SourceDistributer = updateData.SourceDistributer
 		data.StoreHouseLocation = updateData.StoreHouseLocation
 		data.HumidityOfStorage = updateData.HumidityOfStorage
 		data.TemperatureOfStorage = updateData.TemperatureOfStorage
+		data.OrderId = updateData.OrderId
 
 		dataJSON, err = json.Marshal(data)
 		if err != nil {
