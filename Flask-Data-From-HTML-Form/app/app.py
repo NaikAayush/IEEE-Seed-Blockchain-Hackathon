@@ -7,8 +7,6 @@ import hashlib
 app = Flask(__name__)
 log = logging.getLogger(__name__)
 
-
-
 @app.route("/login",methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -16,9 +14,9 @@ def login():
         password = request.form["password"]
         
         #sql query to check login
-        login = user.query.filter_by(username=uname, password=passw).first()
-        if login is not None:
-            return redirect(url_for("index"))
+        # login = user.query.filter_by(username=uname, password=passw).first()
+        # if login is not None:
+        return redirect(url_for("common_login"))
     
     return render_template("common_login.html")
 
@@ -51,7 +49,10 @@ def spa_create():
     if request.method == "POST":       
         data = request.form.to_dict(flat=True)
         print(data)
+        print(data.keys())
+        print(len(list(data.keys())))
         #currently redirects to login page after you signup
+        
         return redirect(url_for("login"))
     return render_template("spa_create.html")
 
@@ -59,7 +60,9 @@ def spa_create():
 def stl_update():
     if request.method == "POST":       
         data = request.form.to_dict(flat=True)
-        print(data)
+        # print(data)
+        print(data.keys())
+        # print(len(list(data.keys())))
         #currently redirects to login page after you signup
         return redirect(url_for("login"))
     
@@ -70,7 +73,9 @@ def stl_update():
 def sca_update():
     if request.method == "POST":       
         data = request.form.to_dict(flat=True)
-        print(data)
+        # print(data)
+        print(data.keys())
+        # print(len(list(data.keys())))
         #currently redirects to login page after you signup
         return redirect(url_for("login"))
     
