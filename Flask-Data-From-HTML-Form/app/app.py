@@ -17,6 +17,18 @@ import itertools
 
 app.secret_key = "somesecretkey"
 
+
+#to drop tables
+"""
+statement = 'drop table USER'
+request = TableRequest().set_statement(statement)
+result = handle.do_table_request(request, 40000, 3000)
+
+statement = 'drop table SEED_BLOCK'
+request = TableRequest().set_statement(statement)
+result = handle.do_table_request(request, 40000, 3000)
+"""
+
 #to create the registration details table
 statement = 'create table if not exists USER(username string, name string, password string, mail string, type string, farmer json, agency json, ' + 'primary key(username))' 
 req = TableRequest().set_statement(statement).set_table_limits(
@@ -27,18 +39,6 @@ statement = 'create table if not exists SEED_BLOCK(lot_no string, seed_data json
 req = TableRequest().set_statement(statement).set_table_limits(
     TableLimits(20, 10, 5))
 result = handle.do_table_request(req, 40000, 3000)
-
-
-"""
-#to drop tables
-statement = 'drop table USER'
-request = TableRequest().set_statement(statement)
-result = handle.do_table_request(request, 40000, 3000)
-statement = 'drop table SEED_BLOCK'
-request = TableRequest().set_statement(statement)
-result = handle.do_table_request(request, 40000, 3000)
-"""
-
 
 #query
 """statement = 'select * from SG'
@@ -73,7 +73,7 @@ def home():
             break
 
     temp = dict(results[0])
-    print(temp)
+    #print(temp)
     type_login = temp["type"]
     if type_login == "farmer":
         #exec("farmer =" + temp["farmer"])
@@ -254,19 +254,20 @@ def distibutor_update():
             req.set_value({
                 'lot_no': lno,
                 'seed_data':json.dumps(data)})
+            result = handle.put(req)
         else:
             print("updation failed")
 
     return render_template("distributer_update.html",login_type=session["login_type"])
 
-@app.route("/tack_seed", methods=["POST","GET"])
+@app.route("/track_seed", methods=["POST","GET"])
 def track_seed():
     if "username" not in session:
         return redirect(url_for("login"))
     if request.method == "POST":
         data = request.form.to_dict(flat=True)
         lno = data["lotNumber"]
-
+        #print(lno)
         statement = 'select seed_data from SEED_BLOCK where lot_no = "{}"'.format(lno)
         req = QueryRequest().set_statement(statement)
         results = []
@@ -275,12 +276,12 @@ def track_seed():
             results = results + result# do something with results
             if req.is_done():
                 break
-        
+        #print(results) 
         seed_data = json.loads(dict(results[0])["seed_data"])
-        
-        return render_template("track_seed.html",seed_data=seed_data,login_type=session["login_type"])
-
-    return render_template("track_seed.html",login_type=session["login_type"])
+        #print(type(seed_data))        
+        return render_template("track_seed.html",data=seed_data,login_type=session["login_type"])
+    data={}
+    return render_template("track_seed.html",login_type=session["login_type"],data=data)
 
 @app.route("/spa", methods=["GET", "POST"])
 def spa_create():
@@ -349,6 +350,7 @@ def stl_update():
             req.set_value({
                 'lot_no': lno,
                 'seed_data':json.dumps(data)})
+            result = handle.put(req)
         else:
             print("updation failed")
 
@@ -386,10 +388,12 @@ def sca_update():
 
         result = handle.delete(req)
         if result.get_success():
+            print("hello")
             req = PutRequest().set_table_name('SEED_BLOCK')
             req.set_value({
                 'lot_no': lno,
                 'seed_data':json.dumps(data)})
+            result = handle.put(req)
         else:
             print("updation failed")
 
@@ -429,6 +433,7 @@ def spp_update():
             req.set_value({
                 'lot_no': lno,
                 'seed_data':json.dumps(data)})
+            result = handle.put(req)
         else:
             print("updation failed")
 
