@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	// "encoding/json"
+	"encoding/json"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
 )
@@ -12,6 +12,11 @@ import (
 type SeedInfo struct {
 	ID string `json:"ID"`
 	Name string `json:"name"`
+	Testing string `json:"testing"`
+}
+
+type SeedUpdateTests struct {
+	Testing string `json:"testing"`
 }
 
 // SeedChaincode implementation of Chaincode
@@ -32,11 +37,11 @@ func (t *SeedChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
 		return shim.Error("Unknown function call")
 	}
 
-	// Put in the ledger the key/value hello/world
-	err := stub.PutState("hello", []byte("world"))
-	if err != nil {
-		return shim.Error(err.Error())
-	}
+	// // Put in the ledger the key/value hello/world
+	// err := stub.PutState("hello", []byte("world"))
+	// if err != nil {
+	// 	return shim.Error(err.Error())
+	// }
 
 	// Return a successful message
 	return shim.Success(nil)
@@ -69,6 +74,10 @@ func (t *SeedChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	// The update argument will manage all update in the ledger
 	if args[0] == "invoke" {
 		return t.invoke(stub, args)
+	}
+
+	if args[0] == "updateTesting" {
+		return t.updateTesting(stub, args)
 	}
 
 	// If the arguments given don’t match any function, we return an error
@@ -107,16 +116,25 @@ func (t *SeedChaincode) invoke(stub shim.ChaincodeStubInterface, args []string) 
 		return shim.Error("The number of arguments is insufficient.")
 	}
 
-	// Check if the ledger key is "hello" and process if it is the case. Otherwise it returns an error.
 	if len(args) == 3 {
 
 		// Write the new value in the ledger
-		err := stub.PutState(args[1], []byte(args[2]))
+		var data SeedInfo
+		err := json.Unmarshal([]byte(args[2]), &data)
+		if err != nil {
+			return shim.Error("Argument 2 was not a valid JSON")
+		}
+
+		jsonified, err := json.Marshal(data)
+		if err != nil {
+			return shim.Error("Failed to convert to JSON")
+		}
+
+		err = stub.PutState(args[1], jsonified)
 		if err != nil {
 			return shim.Error("Failed to update state of hello")
 		}
 
-		// Notify listeners that an event "eventInvoke" have been executed (check line 19 in the file invoke.go)
 		err = stub.SetEvent("eventInvoke", []byte{})
 		if err != nil {
 			return shim.Error(err.Error())
@@ -128,6 +146,45 @@ func (t *SeedChaincode) invoke(stub shim.ChaincodeStubInterface, args []string) 
 
 	// If the arguments given don’t match any function, we return an error
 	return shim.Error("Unknown invoke action, check the second argument.")
+}
+
+func (t *SeedChaincode) updateTesting(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	if len(args) < 3 {
+		return shim.Error("The number of arguments is insufficient.")
+	}
+	if len(args) == 3 {
+		var updateData SeedUpdateTests
+		err := json.Unmarshal([]byte(args[2]), &updateData)
+		if err != nil {
+			return shim.Error("Bad JSON data")
+		}
+
+		dataJSON, err := stub.GetState(args[1])
+		if err != nil {
+			return shim.Error("Seed does not yet exist")
+		}
+		var data SeedInfo
+		err = json.Unmarshal(dataJSON, &data)
+		if err != nil {
+			return shim.Error("bad JSON in blockchain")
+		}
+
+		data.Testing = updateData.Testing
+
+		dataJSON, err = json.Marshal(data)
+		if err != nil {
+			return shim.Error("Could not convert to JSON")
+		}
+
+		err = stub.PutState(args[1], dataJSON)
+		if err != nil {
+			return shim.Error("Could not write back to blockchain")
+		}
+
+		return shim.Success(nil)
+	}
+
+	return shim.Error("Bad number of arguments")
 }
 
 func main() {
