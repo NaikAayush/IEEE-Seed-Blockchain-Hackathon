@@ -1,7 +1,7 @@
 ## General Instructions
 1. Make your own branch
 2. Commit code to your branch.
-
+3. NO
 
 ## Important Git Commands
 
