@@ -10,27 +10,12 @@ import hashlib
 app = Flask(__name__)
 #log = logging.getLogger(__name__)
 from conn import handle
-from borneo import TableLimits, TableRequest, PutRequest, QueryRequest, PrepareRequest
+from borneo import TableLimits, TableRequest, PutRequest, QueryRequest, PrepareRequest, DeleteRequest
 from collections import OrderedDict
 import random
-import  itertools
+import itertools
 
 app.secret_key = "somesecretkey"
-
-def uniqueid():
-    """Generates a unique ID. Tested it for 1000 numbers, all of them were unique"""
-    seed = random.getrandbits(32)
-    while True:
-       yield seed
-       seed += 1
-
-def get_uniqueid(number_of_ids=1):
-    """Wrapper for the above function
-    params number_of_ids: int, enter the number of ids you want to generate
-    Return: List of ids"""       
-    unique_sequence = uniqueid()
-    ids = list(itertools.islice(unique_sequence, number_of_ids))
-    return ids
 
 #to create the registration details table
 statement = 'create table if not exists USER(username string, name string, password string, mail string, type string, farmer json, agency json, ' + 'primary key(username))' 
@@ -48,7 +33,12 @@ result = handle.do_table_request(req, 40000, 3000)
 #to drop tables
 statement = 'drop table USER'
 request = TableRequest().set_statement(statement)
-result = handle.do_table_request(request, 40000, 3000)"""
+result = handle.do_table_request(request, 40000, 3000)
+statement = 'drop table SEED_BLOCK'
+request = TableRequest().set_statement(statement)
+result = handle.do_table_request(request, 40000, 3000)
+"""
+
 
 #query
 """statement = 'select * from SG'
@@ -67,14 +57,42 @@ for i in results:
 """
 
 
-@app.route('/profile')
-def profile():
-    return 'Profile'
-
 @app.route("/")
 def home():
     #vary based of user type , to be done
-    return render_template("index.html")
+    if "username" not in session:
+        return redirect(url_for("login"))
+    
+    statement = 'select * from USER where username="{}"'.format(session["username"])
+    req = QueryRequest().set_statement(statement)
+    results = []
+    while True:
+        result = handle.query(req).get_results()
+        results = results + result # do something with results
+        if req.is_done():
+            break
+
+    temp = dict(results[0])
+    print(temp)
+    type_login = temp["type"]
+    if type_login == "farmer":
+        #exec("farmer =" + temp["farmer"])
+        #address = farmer["address"]
+        session["login_type"]=type_login
+        return render_template("index.html",login_type=type_login)
+    else:
+        agencyType = json.loads(temp["agency"])["agencyType"]
+        session["login_type"]=agencyType
+        return render_template("index.html",login_type=agencyType)
+
+    
+    #return render_template("index.html")
+
+@app.route("/missions")
+def missions():
+    if "username" not in session:
+        return render_template("index.html")
+    return render_template("index.html",login_type=session["login_type"])
 
 @app.route("/login",methods=["GET", "POST"])
 def login():
@@ -105,28 +123,24 @@ def login():
         if check_password_hash(qresults[0]["password"],password):
             session['username']=username
             print("logged in as " + str(session['username']))
-
-        #sql query to check login
-        #login = user.query.filter_by(username=uname, password=passw).first()
-        #if login is not None:
-            #return redirect(url_for("index"))
+            return redirect(url_for("home"))
     
-    return render_template("common_login.html")
+    return render_template("login.html")
 
 @app.route("/logout",methods=["GET"])
-def logout():
+def sign_out():
     session.pop('username',None)
+    session.pop('login_type',None)
     return redirect(url_for("login"))
 
 @app.route("/register",methods=["POST","GET"])
 def register():
-    return render_template("registration.html")
+    return render_template("register_options.html")
 
 @app.route("/register_farmer", methods=["GET", "POST"])
 def register_farmer():
     if request.method == "POST": 
         #data = request.get_json()
-        required_fields = ["userid","name","password","email","phone","address","authid","agencytype"]
 
         data = request.form.to_dict(flat=True)
         #print(data)
@@ -161,17 +175,12 @@ def register_farmer():
         result = handle.put(req)
         if result.get_version() is not None:
             #return "successful"
-            return render_template("common_login.html")
+            return render_template("login.html")
         else:
             flash("failed")
-
         
-        #currently redirects to login page after you signup
-        #return redirect((url_for("login")))
-        # if request.form['agencyType'] == "SPA":
-            
-        #     return redirect(url_for("login"))
-
+        return render_template("farmer_registration.html")
+        
     return render_template("farmer_registration.html")
 
 @app.route("/register_agency",methods=["POST","GET"])
@@ -180,7 +189,7 @@ def register_agency():
 
         data = request.form.to_dict(flat=True)
         data["type"]="agency"
-        data["agency"]={"authorizationId":data["authorizationId"],"agencyType":data["agencyType"]}
+        data["agency"]={"agencyType":data["agencyType"]}
         data["farmer"]={}
         
         statement = 'select username from USER'
@@ -209,159 +218,230 @@ def register_agency():
             'agency':json.dumps(data["agency"])})
         result = handle.put(req)
         if result.get_version() is not None:
-            return render_template("common_login.html")
+            return render_template("login.html")
         else:
             flash("failed")
 
     return render_template("agency_registration.html")
 
-
-@app.route("/tack_seed", methods=["POST","GET"])
-def track_seed():
-    if session['username']:
-        
-    return redirect(url_for("login"))
-
-@app.route("/spa", methods=["GET", "POST"])
-def spa_create():
-    if request.method == "POST":       
+@app.route("/distributor", methods=["POST","GET"])
+def distibutor_update():
+    if "username" not in session:
+        return redirect(url_for("login"))
+    if request.method == "POST":
         data = request.form.to_dict(flat=True)
         lno = data["lotNumber"]
-        
-        statement = 'select * from users where name = "{}"'.format(lno)
+
+        statement = 'select * from SEED_BLOCK where lot_no = "{}"'.format(lno)
         req = QueryRequest().set_statement(statement)
         results = []
         while True:
             result = handle.query(req).get_results()
             results = results + result# do something with results
             if req.is_done():
-            break
-        
+                break    
 
-        if len(qresults)==0:
-            data.pop("lotNumber")
-            req = PutRequest().set_table_name('USER')
+        data.pop("lotNumber")
+        dict1 = json.loads(dict(results[0])["seed_data"])
+        data = {**data,**dict1}
+
+        req = DeleteRequest().set_table_name('SEED_BLOCK')
+        req.set_key({'lot_no': lno})
+
+        result = handle.delete(req)
+        if result.get_success():
+            req = PutRequest().set_table_name('SEED_BLOCK')
             req.set_value({
                 'lot_no': lno,
                 'seed_data':json.dumps(data)})
-                    """{"owner":data["owner"],
-                    "crop":data["crop"],
-                    "variety":data["variety"],
-                    "sourceTagNo":data["sourceTagNo"],
-                    "sourceClass":data["sourceClass"],
-                    "destinationClass":data["destinationClass"],
-                    "sourceQuantity":data["SourceQuantity"],
-                    "sourceDateOfIssue":data["sourceDateOfIssue"],
-                    "spaName":data["spaName"],
-                    "sourceStoreHouse":data["sourceStoreHouse"],
-                    "destinationStoreHouse":data["destinationStoreHouse"],
-                    "sgName":data["sgName"],
-                    "sgId":data["sgId"],
-                    "finYear":data["finYear"],
-                    "season":data["season"],
-                    "landRecordsKhataNo":data["landRecordsKhataNo"],
-                    "landRecordsPlotNo":data["landRecordsPlotNo"],
-                    "landRecordsArea":data["landRecordsArea"],
-                    "cropRegistrationCode":data["cropRegistrationCode"],
-                    "sppName":data["sppName"],
-                    "sppId":data["sppId"]
-                    "village":data["village"],
-                    "state":data["state"],
-                    "temp":data["temp"],
-                    "humidity":data["humidity"],
-                    "durationOfGrowth":data["durationOfGrowth"],
-                    "fertilizerType":data["fertilizerType"],
-                    "fertilizerName":data["fertilizerName"],
-                    "frequencyOfFertilization":data["frequencyOfFertilization"],
-                    "organicPercentageInSoil":data["organicPercentageInSoil"],
-                    "soilStructure":data["soilStructure"],
-                    "averageSoilTemperature":data["averageSoilTemperature"],
-                    "sandPercentage":data["sandPercentage"],
-                    "siltPercentage":data["siltPercentage"],
-                    "clayPercentage":data["clayPercentage"],
-                    "fertilityStatus":data["fertilityStatus"],
-                    "cotyledon":data["cotyledon"],
-                    "optimalGerminationTemperature":data["optimalGerminationTemperature"],
-                    "atmosphericPh":data["atmosphericPh"],
-                    "dormancyPercentage":data["dormancyPercentage"],
-                    "farmingType":data["farmingType"],
-                    "geneticPurity":data["geneticPurity"],
-                    "mostVulnerableDiseases":data["mostVulnerableDiseases"]
-                    "storeHouseLocation":data["storeHouseLocation"],
-                    "humidityOfStorage":data["humidityOfStorage"],
-                    "temperatureOfStorage":data["temperatureOfStorage"]
-                            }"""
+        else:
+            print("updation failed")
 
-                    #)})
+    return render_template("distributer_update.html",login_type=session["login_type"])
+
+@app.route("/tack_seed", methods=["POST","GET"])
+def track_seed():
+    if "username" not in session:
+        return redirect(url_for("login"))
+    if request.method == "POST":
+        data = request.form.to_dict(flat=True)
+        lno = data["lotNumber"]
+
+        statement = 'select seed_data from SEED_BLOCK where lot_no = "{}"'.format(lno)
+        req = QueryRequest().set_statement(statement)
+        results = []
+        while True:
+            result = handle.query(req).get_results()
+            results = results + result# do something with results
+            if req.is_done():
+                break
+        
+        seed_data = json.loads(dict(results[0])["seed_data"])
+        
+        return render_template("track_seed.html",seed_data=seed_data,login_type=session["login_type"])
+
+    return render_template("track_seed.html",login_type=session["login_type"])
+
+@app.route("/spa", methods=["GET", "POST"])
+def spa_create():
+    if "username" not in session:
+        return redirect(url_for("login"))
+    if request.method == "POST":       
+        data = request.form.to_dict(flat=True)
+        lno = data["lotNumber"]
+        
+        statement = 'select * from SEED_BLOCK where lot_no = "{}"'.format(lno)
+        req = QueryRequest().set_statement(statement)
+        results = []
+        while True:
+            result = handle.query(req).get_results()
+            results = results + result# do something with results
+            if req.is_done():
+                break
+        
+        if len(results)==0:
+            data.pop("lotNumber")
+            req = PutRequest().set_table_name('SEED_BLOCK')
+            req.set_value({'lot_no': lno,'seed_data':json.dumps(data)})
             result = handle.put(req)
             if result.get_version() is not None:
-            return render_template("common_login.html")
+                return redirect(url_for("home"))
                
         else:
-            
-
-
+            print("insertion failed")
 
         #print(data)
         #currently redirects to login page after you signup
-        
+        #return redirect(url_for("home"))
         return redirect(url_for("home"))
-    return render_template("spa_create.html")
+    return render_template("spa_create_seed.html",login_type=session["login_type"])
+
 
 @app.route("/stl", methods=["GET", "POST"])
 def stl_update():
+    if "username" not in session:
+        return redirect(url_for("login"))
     if request.method == "POST":       
         data = request.form.to_dict(flat=True)
-        print(data)
+        #print(data)
+
+        lno = data["lotNumber"]
+
+        statement = 'select * from SEED_BLOCK where lot_no = "{}"'.format(lno)
+        req = QueryRequest().set_statement(statement)
+        results = []
+        while True:
+            result = handle.query(req).get_results()
+            results = results + result# do something with results
+            if req.is_done():
+                break    
+
+        data.pop("lotNumber")
+        dict1 = json.loads(dict(results[0])["seed_data"])
+        data = {**data,**dict1}
+
+        req = DeleteRequest().set_table_name('SEED_BLOCK')
+        req.set_key({'lot_no': lno})
+
+        result = handle.delete(req)
+        if result.get_success():
+            req = PutRequest().set_table_name('SEED_BLOCK')
+            req.set_value({
+                'lot_no': lno,
+                'seed_data':json.dumps(data)})
+        else:
+            print("updation failed")
+
         #currently redirects to login page after you signup
-        return redirect(url_for("login"))
+        return redirect(url_for("home"))
     
-    return render_template("stl_update.html")
+    return render_template("stl_update_seed.html",login_type=session["login_type"])
 
 
 @app.route("/sca", methods=["GET", "POST"])
 def sca_update():
+    if "username" not in session:
+        return redirect(url_for("login"))
     if request.method == "POST":       
         data = request.form.to_dict(flat=True)
-        print(data)
+        #print(data)
+        
+        lno = data["lotNumber"]
+
+        statement = 'select * from SEED_BLOCK where lot_no = "{}"'.format(lno)
+        req = QueryRequest().set_statement(statement)
+        results = []
+        while True:
+            result = handle.query(req).get_results()
+            results = results + result# do something with results
+            if req.is_done():
+                break    
+
+        data.pop("lotNumber")
+        dict1 = json.loads(dict(results[0])["seed_data"])
+        data = {**data,**dict1}
+
+        req = DeleteRequest().set_table_name('SEED_BLOCK')
+        req.set_key({'lot_no': lno})
+
+        result = handle.delete(req)
+        if result.get_success():
+            req = PutRequest().set_table_name('SEED_BLOCK')
+            req.set_value({
+                'lot_no': lno,
+                'seed_data':json.dumps(data)})
+        else:
+            print("updation failed")
+
         #currently redirects to login page after you signup
-        return redirect(url_for("login"))
+        return redirect(url_for("home"))
     
-    return render_template("sca_update.html")
+    return render_template("sca_update_seed.html",login_type=session["login_type"])
 
 @app.route("/spp",methods=["GET","POST"])
-def spp_create():
+def spp_update():
+    if "username" not in session:
+        return redirect(url_for("login"))
     if request.method == "POST":
         data = request.form.to_dict(flat=True)
             
         lno = data["lotNumber"]
 
-        statement = 'select * from users where name = "{}"'.format(lno)
+        statement = 'select * from SEED_BLOCK where lot_no = "{}"'.format(lno)
         req = QueryRequest().set_statement(statement)
         results = []
         while True:
             result = handle.query(req).get_results()
             results = results + result# do something with results
             if req.is_done():
-            break    
+                break    
 
-        if len(qresults)==0:
-            data.pop("lotNumber")
-            req = PutRequest().set_table_name('USER')
+        data.pop("lotNumber")
+        dict1 = json.loads(dict(results[0])["seed_data"])
+        data = {**data,**dict1}
+
+        req = DeleteRequest().set_table_name('SEED_BLOCK')
+        req.set_key({'lot_no': lno})
+
+        result = handle.delete(req)
+        if result.get_success():
+            req = PutRequest().set_table_name('SEED_BLOCK')
             req.set_value({
                 'lot_no': lno,
                 'seed_data':json.dumps(data)})
         else:
-            dict1 = json.loads(dict())
+            print("updation failed")
+
+        return redirect(url_for("home"))
+
+    return render_template("spp_update_seed.html",login_type=session["login_type"])
+                
              
-
-
-
-# handle login failed
+"""# handle login failed
 @app.errorhandler(401)
 def page_not_found(e):
     return Response('<p>Login failed</p>')
-
+"""
 if __name__=="__main__":
     app.debug=True
     app.run()
