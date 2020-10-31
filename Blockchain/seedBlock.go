@@ -80,6 +80,10 @@ func (t *SeedChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return t.updateTesting(stub, args)
 	}
 
+	if args[0] == "getHistory" {
+		return t.getHistory(stub, args)
+	}
+
 	// If the arguments given don’t match any function, we return an error
 	return shim.Error("Unknown action, check the first argument")
 }
@@ -185,6 +189,38 @@ func (t *SeedChaincode) updateTesting(stub shim.ChaincodeStubInterface, args []s
 	}
 
 	return shim.Error("Bad number of arguments")
+}
+
+func (t *SeedChaincode) getHistory(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	if len(args) < 2 {
+		return shim.Error("The number of arguments is insufficient.")
+	}
+	iter, err := stub.GetHistoryForKey(args[1])
+	if err != nil {
+		return shim.Error("Could not find key!")
+	}
+	defer iter.Close()
+	var assets []SeedInfo
+	for iter.HasNext() {
+		dataJSON, err := iter.Next()
+		if err != nil {
+			return shim.Error("Could not find data from key")
+		}
+
+		var data SeedInfo
+		err = json.Unmarshal(dataJSON.Value, &data)
+		if err != nil {
+			return shim.Error("Got invalid data from blockchain")
+		}
+		assets = append(assets, data)
+	}
+
+	assetsJSON, err := json.Marshal(assets)
+	if err != nil {
+		return shim.Error("Could not encode data to JSON")
+	}
+
+	return shim.Success(assetsJSON)
 }
 
 func main() {
