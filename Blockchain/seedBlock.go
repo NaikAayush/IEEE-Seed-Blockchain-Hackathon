@@ -11,12 +11,75 @@ import (
 // Seed structure
 type SeedInfo struct {
 	ID string `json:"ID"`
-	Name string `json:"name"`
-	Testing string `json:"testing"`
+	Owner	string `json:"owner"`
+	Crop	string `json:"crop"`
+	Variety	string `json:"variety"`
+	SourceTagNo	string `json:"sourceTagNo"`
+	SourceClass	string `json:"sourceClass"`
+	DestinationClass	string `json:"destinationClass"`
+	SourceQuantity	string `json:"sourceQuantity"`
+	SourceDateOfIssue	string `json:"sourceDateOfIssue"`
+	SpaName	string `json:"spaName"`
+	SourceStoreHouse	string `json:"sourceStoreHouse"`
+	DestinationStoreHouse	string `json:"destinationStoreHouse"`
+	SgName	string `json:"sgName"`
+	SgId	string `json:"sgId"`
+	FinYear	string `json:"finYear"`
+	Season	string `json:"season"`
+	LandRecordsKhataNo	string `json:"landRecordsKhataNo"`
+	LandRecordsPlotNo	string `json:"landRecordsPlotNo"`
+	LandRecordsArea	string `json:"landRecordsArea"`
+	CropRegistrationCode	string `json:"cropRegistrationCode"`
+	SPPName	string `json:"sppName"`
+	SPPId	string `json:"sppId"`
+
+	SCAName string `json:"scaName"`
+	TotalQuantityProduced string `json:"totalQuantityProduced"`
+	ProcessingDate string `json:"processingDate"`
+	VerificationDate string `json:"verificationDate"`
+	SampleSecretCode string `json:"sampleSecretCode"`
+	SampleTestDate string `json:"sampleTestDate"`
+	CertificateNumber string `json:"certificateNumber"`
+	TagSeries string `json:"tagSeries"`
+	TagIssuedRangeFrom string `json:"tagIssuedRangeFrom"`
+	TagIssuedRangeTo string `json:"tagIssuedRangeTo"`
+	NoOfTagsIssued string `json:"noOfTagsIssued"`
+	CetificateValidityInMonth string `json:"cetificateValidityInMonth"`
+
+	StoreHouseLocation string `json:"storeHouseLocation"`
+	HumidityOfStorage string `json:"humidityOfStorage"`
+	TemperatureOfStorage string `json:"temperatureOfStorage"`
+
+	STLName string `json:"stlName"`
+	SamplePassed string `json:"samplePassed"`
+}
+
+type SeedUpdateCertification struct {
+	SCAName string `json:"scaName"`
+	TotalQuantityProduced string `json:"totalQuantityProduced"`
+	ProcessingDate string `json:"processingDate"`
+	VerificationDate string `json:"verificationDate"`
+	SampleSecretCode string `json:"sampleSecretCode"`
+	SampleTestDate string `json:"sampleTestDate"`
+	CertificateNumber string `json:"certificateNumber"`
+	TagSeries string `json:"tagSeries"`
+	TagIssuedRangeFrom string `json:"tagIssuedRangeFrom"`
+	TagIssuedRangeTo string `json:"tagIssuedRangeTo"`
+	NoOfTagsIssued string `json:"noOfTagsIssued"`
+	CetificateValidityInMonth string `json:"cetificateValidityInMonth"`
 }
 
 type SeedUpdateTests struct {
-	Testing string `json:"testing"`
+	STLName string `json:"stlName"`
+	SamplePassed string `json:"samplePassed"`
+}
+
+type SeedUpdateDist struct {
+	SourceStoreHouse	string `json:"sourceStoreHouse"`
+	DestinationStoreHouse	string `json:"destinationStoreHouse"`
+	StoreHouseLocation string `json:"storeHouseLocation"`
+	HumidityOfStorage string `json:"humidityOfStorage"`
+	TemperatureOfStorage string `json:"temperatureOfStorage"`
 }
 
 // SeedChaincode implementation of Chaincode
@@ -76,8 +139,16 @@ func (t *SeedChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return t.invoke(stub, args)
 	}
 
-	if args[0] == "updateTesting" {
-		return t.updateTesting(stub, args)
+	if args[0] == "updateTest" {
+		return t.updateTest(stub, args)
+	}
+
+	if args[0] == "updateCertification" {
+		return t.updateCertification(stub, args)
+	}
+
+	if args[0] == "updateDist" {
+		return t.updateDist(stub, args)
 	}
 
 	if args[0] == "getHistory" {
@@ -152,7 +223,7 @@ func (t *SeedChaincode) invoke(stub shim.ChaincodeStubInterface, args []string) 
 	return shim.Error("Unknown invoke action, check the second argument.")
 }
 
-func (t *SeedChaincode) updateTesting(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+func (t *SeedChaincode) updateTest(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	if len(args) < 3 {
 		return shim.Error("The number of arguments is insufficient.")
 	}
@@ -173,7 +244,101 @@ func (t *SeedChaincode) updateTesting(stub shim.ChaincodeStubInterface, args []s
 			return shim.Error("bad JSON in blockchain")
 		}
 
-		data.Testing = updateData.Testing
+		data.STLName = updateData.STLName
+		data.SamplePassed = updateData.SamplePassed
+
+		dataJSON, err = json.Marshal(data)
+		if err != nil {
+			return shim.Error("Could not convert to JSON")
+		}
+
+		err = stub.PutState(args[1], dataJSON)
+		if err != nil {
+			return shim.Error("Could not write back to blockchain")
+		}
+
+		return shim.Success(nil)
+	}
+
+	return shim.Error("Bad number of arguments")
+}
+
+func (t *SeedChaincode) updateCertification(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	if len(args) < 3 {
+		return shim.Error("The number of arguments is insufficient.")
+	}
+	if len(args) == 3 {
+		var updateData SeedUpdateCertification
+		err := json.Unmarshal([]byte(args[2]), &updateData)
+		if err != nil {
+			return shim.Error("Bad JSON data")
+		}
+
+		dataJSON, err := stub.GetState(args[1])
+		if err != nil {
+			return shim.Error("Seed does not yet exist")
+		}
+		var data SeedInfo
+		err = json.Unmarshal(dataJSON, &data)
+		if err != nil {
+			return shim.Error("bad JSON in blockchain")
+		}
+
+		data.SCAName = updateData.SCAName
+		data.TotalQuantityProduced = updateData.TotalQuantityProduced
+		data.ProcessingDate = updateData.ProcessingDate
+		data.VerificationDate = updateData.VerificationDate
+		data.SampleSecretCode = updateData.SampleSecretCode
+		data.SampleTestDate = updateData.SampleTestDate
+		data.CertificateNumber = updateData.CertificateNumber
+		data.TagSeries = updateData.TagSeries
+		data.TagIssuedRangeFrom = updateData.TagIssuedRangeFrom
+		data.TagIssuedRangeTo = updateData.TagIssuedRangeTo
+		data.NoOfTagsIssued = updateData.NoOfTagsIssued
+		data.CetificateValidityInMonth = updateData.CertificateNumber
+
+		dataJSON, err = json.Marshal(data)
+		if err != nil {
+			return shim.Error("Could not convert to JSON")
+		}
+
+		err = stub.PutState(args[1], dataJSON)
+		if err != nil {
+			return shim.Error("Could not write back to blockchain")
+		}
+
+		return shim.Success(nil)
+	}
+
+	return shim.Error("Bad number of arguments")
+}
+
+func (t *SeedChaincode) updateDist(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	if len(args) < 3 {
+		return shim.Error("The number of arguments is insufficient.")
+	}
+	if len(args) == 3 {
+		var updateData SeedUpdateDist
+		err := json.Unmarshal([]byte(args[2]), &updateData)
+		if err != nil {
+			return shim.Error("Bad JSON data")
+		}
+
+		dataJSON, err := stub.GetState(args[1])
+		if err != nil {
+			return shim.Error("Seed does not yet exist")
+		}
+		var data SeedInfo
+		err = json.Unmarshal(dataJSON, &data)
+		if err != nil {
+			return shim.Error("bad JSON in blockchain")
+		}
+
+		data.SourceStoreHouse = updateData.SourceStoreHouse
+		data.DestinationStoreHouse = updateData.DestinationStoreHouse
+		data.StoreHouseLocation = updateData.StoreHouseLocation
+		data.HumidityOfStorage = updateData.HumidityOfStorage
+		data.TemperatureOfStorage = updateData.TemperatureOfStorage
 
 		dataJSON, err = json.Marshal(data)
 		if err != nil {
