@@ -8,10 +8,6 @@ app = Flask(__name__)
 log = logging.getLogger(__name__)
 
 
-@main.route('/profile')
-def profile():
-    return 'Profile'
-
 
 @app.route("/login",methods=["GET", "POST"])
 def login():
