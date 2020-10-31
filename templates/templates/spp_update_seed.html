@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>SPP Update Seed</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" href="../static/css/app_update_seed_styles.min.css">
+</head>
+
+<body style="background: url(&quot;../static/img/photo-1557234195-bd9f290f0e4d.jpg&quot;) center / cover repeat-y;backdrop-filter: blur(5px);height: 100vh;">
+    <nav class="navbar navbar-light navbar-expand-md navigation-clean" style="background: rgba(0,0,0,0);">
+        <div class="container"><a class="navbar-brand" href="{{ url_for('home') }}" style="color: #ffffff;">ORANGE</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div
+                class="collapse navbar-collapse" id="navcol-1">
+                <ul class="nav navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link active" href="{{ url_for('home') }}" style="color: #ffffff;">HOME</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('missions') }}" style="color: #ffffff;">MISSIONS</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('track_seed') }}" style="color: #ffffff;">TRACK SEED</a></li>
+                    <li class="nav-item"><a class="nav-link active" style="color: #ffffff;">HANDLE SEED</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('track_seed') }}" style="color: #ffffff;">SIGN OUT</a></li>
+                </ul>
+        </div>
+        </div>
+    </nav>
+    <div class="border rounded newsletter-subscribe" style="margin-left: 40px;margin-right: 40px;margin-top: 48px;margin-bottom: 50px;">
+        <div class="container">
+            <div class="intro">
+                <h2 class="text-center" style="font-family: Roboto, sans-serif;">Enter Seed Block Details</h2>
+            </div>
+            <form class="form-inline" method="post">
+                <div class="table-responsive table-borderless" style="width: 100%;">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="width: 250px;height: 45px;text-align: center;padding: 20px;"><strong>Lot Number</strong></td>
+                                <td style="width: 250px;height: 45px;"><input class="form-control" type="text" value="APR19-33-028-117(2)" name="lotNumber"></td>
+                                <td style="width: 250px;height: 45px;text-align: center;padding: 0px;padding-top: 20px;"><strong>SG Name</strong><br></td>
+                                <td style="width: 250px;height: 45px;" name="owner" value="OSSC"><input class="form-control" type="text" value="Anand Singh" name="sgName"></td>
+                            </tr>
+                            <tr>
+                                <td style="width: 250px;height: 45px;text-align: center;padding: 20px;"><strong>Village/District</strong><br></td>
+                                <td style="width: 250px;height: 45px;"><input class="form-control" type="text" name="village" value="Dharwad"></td>
+                                <td style="width: 250px;height: 45px;text-align: center;padding: 0px;padding-top: 20px;"><strong>State</strong><br></td>
+                                <td style="width: 250px;height: 45px;"><input class="form-control" type="text" name="state" value="Karnataka"></td>
+                            </tr>
+                            <tr>
+                                <td style="width: 250px;height: 45px;text-align: center;padding: 20px;"><strong>Temperature at SG Location</strong><br></td>
+                                <td style="width: 250px;height: 45px;"><input class="form-control" type="text" name="temp" value="30C"></td>
+                                <td style="width: 250px;height: 45px;text-align: center;padding: 0px;padding-top: 20px;"><strong>Humidity at SG Location</strong><br></td>
+                                <td style="width: 250px;height: 45px;"><input class="form-control" type="text" name="humidity" value="85%"></td>
+                            </tr>
+                            <tr>
+                                <td style="width: 250px;height: 45px;text-align: center;padding: 20px;"><strong>Duration of Growth</strong><br></td>
+                                <td style="width: 250px;height: 45px;"><input class="form-control" type="text" name="durationOfGrowth" value="6 Weeks"></td>
+                                <td style="width: 250px;height: 45px;text-align: center;padding: 0px;padding-top: 20px;" name="sourceQuantity" value=""><strong>Fertilizer Type</strong></td>
+                                <td style="width: 250px;height: 45px;"><select class="form-control" name="fertilizerType"><optgroup label="Fertilizer Type"><option value="chemical" selected>Chemical</option><option value="organic" selected>Organic</option><option value="both">Both</option></optgroup></select></td>
+                            </tr>
+                            <tr>
+                                <td style="width: 250px;height: 45px;text-align: center;padding: 20px;"><strong>Fertilizer Name</strong></td>
+                                <td style="width: 250px;height: 45px;"><input class="form-control" type="text" name="fertilizerName" value="Ammonia"></td>
+                                <td style="width: 250px;height: 45px;text-align: center;padding: 20px;"><strong>Frequency of&nbsp;Fertilization</strong></td>
+                                <td style="width: 250px;height: 45px;"><input class="form-control" type="text" name="frequencyOfFertilization"></td>
+                            </tr>
+                            <tr></tr>
+                            <tr>
+                                <td style="width: 250px;height: 45px;text-align: center;padding: 20px;"><strong>Organic Percentage in Soil</strong></td>
+                                <td style="width: 250px;height: 45px;"><input class="form-control" type="text" name="organicPercentageInSoil" value="3-6%"></td>
+                                <td style="width: 250px;height: 45px;text-align: center;padding: 0px;padding-top: 20px;"><strong>Soil Structure</strong></td>
+                                <td style="width: 250px;height: 45px;"><select class="form-control" name="soilStructure"><optgroup label="Soil Structure"><option value="wet" selected>Wet</option><option value="dry" selected>Dry</option><option value="well-drained">Well-Drained</option></optgroup></select></td>
+                            </tr>
+                            <tr>
+                                <td style="width: 250px;height: 45px;text-align: center;padding: 20px;"><strong>Average Soil Temperature</strong></td>
+                                <td style="width: 250px;height: 45px;"><input class="form-control" type="text" name="averageSoilTemperature" value="20C"></td>
+                                <td style="width: 250px;height: 45px;text-align: center;padding: 0px;padding-top: 20px;"><strong>Sand Percentage</strong></td>
+                                <td style="width: 250px;height: 45px;"><input class="form-control" type="text" name="sandPercentage" value="12%"></td>
+                            </tr>
+                            <tr>
+                                <td style="width: 250px;height: 45px;text-align: center;padding: 20px;"><strong>Silt Percentage</strong></td>
+                                <td style="width: 250px;height: 45px;"><input class="form-control" type="text" name="siltPercentage" value="50%"></td>
+                                <td style="width: 250px;height: 45px;text-align: center;padding: 0px;padding-top: 20px;"><strong>Clay Percentage</strong></td>
+                                <td style="width: 250px;height: 45px;"><input class="form-control" type="text" value="8%"></td>
+                            </tr>
+                            <tr>
+                                <td style="width: 250px;height: 45px;text-align: center;padding: 20px;"><strong>Fertility Status</strong></td>
+                                <td style="width: 250px;height: 45px;"><select class="form-control" name="fertilityStatus"><optgroup label="Fertility Status"><option value="high" selected>High</option><option value="medium" selected>Medium</option><option value="low">Low</option></optgroup></select></td>
+                                <td style="width: 250px;height: 45px;text-align: center;padding: 0px;padding-top: 20px;"><strong>Cotyledon</strong></td>
+                                <td style="width: 250px;height: 45px;">
+                                    <div class="form-check" style="width: 250px;"><input class="form-check-input" type="radio" id="formCheck-4" name="cotyledon" value="dicot"><label class="form-check-label" for="formCheck-1">Dicot</label></div>
+                                    <div class="form-check" style="width: 250px;"><input class="form-check-input" type="radio" id="formCheck-3" name="cotyledon" value="monocot"><label class="form-check-label" for="formCheck-1">Monocot</label></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 250px;height: 45px;text-align: center;padding: 20px;"><strong>Optimal Germination Temperature</strong></td>
+                                <td style="width: 250px;height: 45px;"><input class="form-control" type="text" name="optimumGerminationTemperature" value="22C"></td>
+                                <td style="width: 250px;height: 45px;text-align: center;padding: 0px;padding-top: 20px;"><strong>Atmospheric pH</strong></td>
+                                <td style="width: 250px;height: 45px;"><input class="form-control" type="text" name="atmosphericph" value="8.1"></td>
+                            </tr>
+                            <tr>
+                                <td style="width: 250px;height: 45px;text-align: center;padding: 20px;"><strong>Dormancy Percentage</strong></td>
+                                <td style="width: 250px;height: 45px;"><input class="form-control" type="text" name="dormancyPercntage" value="1%"></td>
+                                <td style="width: 250px;height: 45px;text-align: center;padding: 0px;padding-top: 20px;"><strong>Farming Type</strong></td>
+                                <td style="width: 250px;height: 45px;"><input class="form-control" type="text" name="farmingType" value="Terrace Farming"></td>
+                            </tr>
+                            <tr>
+                                <td style="width: 250px;height: 45px;text-align: center;padding: 20px;"><strong>Genetic Purity</strong></td>
+                                <td style="width: 250px;height: 45px;"><input class="form-control" type="text" name="geneticPurity" value="80%"></td>
+                                <td style="width: 250px;height: 45px;text-align: center;padding: 0px;padding-top: 20px;"><strong>Most Vulnerable Diseases</strong></td>
+                                <td style="width: 250px;height: 45px;" name="mostVulnerableDiseases"><textarea class="form-control" name="mostVulnerableDiseases">Rhizoctonia solani</textarea></td>
+                            </tr>
+                            <tr>
+                                <td style="width: 250px;height: 45px;text-align: center;padding: 22px;" colspan="3"><input class="form-control" type="hidden" name="sppName"></td>
+                                <td><button class="btn btn-primary btn-block" type="submit" style="background: rgba(38,159,86,0.94);width: 250px;">Create seed block</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
