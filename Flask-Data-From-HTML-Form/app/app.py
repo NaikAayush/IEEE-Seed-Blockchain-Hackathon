@@ -330,6 +330,7 @@ def track_seed():
         tno = data["tagNumber"]
         lno = sql.returnLotNumber(tno)
         uuid = sql.returnUUIDtag(tno)
+        print(uuid)
         seed_data_a = blockchain.query(uuid)
         print(seed_data_a)
         
@@ -458,7 +459,11 @@ def sca_update():
         data.pop("lotNumber")
         id = sql.returnUUIDLotNumber(lno)
         sampleSecretCode = data["sampleSecretCode"]
+        tagSeries = data["tagSeries"]
+        tagStart = data["tagStart"]
+        tagEnd = data["tagEnd"]
         sql.updateSampleSecretCode(lno,sampleSecretCode)
+        sql.updateTagStuff(sampleSecretCode,tagSeries,tagStart,tagEnd)
         blockchain.updateCertification(id, data)
         dict1 = json.loads(dict(results[0])["seed_data"])
         data = {**dict1,**data}
