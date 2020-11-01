@@ -455,7 +455,7 @@ def sca_update():
         data.pop("lotNumber")
         id = sql.returnUUIDLotNumber(lno)
         sampleSecretCode = data["sampleSecretCode"]
-        updateSampleSecretCode(lotNumber,sampleSecretCode)
+        sql.updateSampleSecretCode(lotNumber,sampleSecretCode)
         blockchain.updateCertification(id, data)
         dict1 = json.loads(dict(results[0])["seed_data"])
         data = {**dict1,**data}
