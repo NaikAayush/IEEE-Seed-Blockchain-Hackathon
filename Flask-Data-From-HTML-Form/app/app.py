@@ -330,19 +330,22 @@ def track_seed():
         tno = data["tagNumber"]
         lno = sql.returnLotNumber(tno)
         uuid = sql.returnUUIDtag(tno)
-        seed_data = blockchain.query(uuid)
-        #print(lno)
-        # statement = 'select seed_data from SEED_BLOCK where lot_no = "{}"'.format(lno)
-        # req = QueryRequest().set_statement(statement)
-        # results = []
-        # while True:
-        #     result = handle.query(req).get_results()
-        #     results = results + result# do something with results
-        #     if req.is_done():
-        #         break
-        #print(results) 
-        # seed_data = json.loads(dict(results[0])["seed_data"])
-        #print(type(seed_data))        
+        seed_data_a = blockchain.query(uuid)
+        print(seed_data_a)
+        
+        print(lno)
+        statement = 'select seed_data from SEED_BLOCK where lot_no = "{}"'.format(lno)
+        req = QueryRequest().set_statement(statement)
+        results = []
+        while True:
+            result = handle.query(req).get_results()
+            results = results + result# do something with results
+            if req.is_done():
+                break
+        print(results)
+        seed_data = json.loads(dict(results[0])["seed_data"])
+        print(seed_data)
+        print(type(seed_data))        
         return render_template("track_seed.html",data=seed_data,login_type=session["login_type"])
     data=[]
     return render_template("track_seed.html",login_type=session["login_type"],data=data)
