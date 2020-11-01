@@ -91,8 +91,12 @@ def main():
                     print(f"\nGot message '{text}'"
                           f"from chat_id {update['message']['chat']['id']}")
 
-                    uuid = sql.returnUUIDtag(text)
-                    print(uuid)
+                    try:
+                        uuid = sql.returnUUIDtag(text)
+                        print(uuid)
+                    except Exception as e:
+                        print(e)
+                        uuid = None
                     if not uuid:
                         send_message("Could not find seed with that ID. Please try again",
                                      update['message']['chat']['id'])
