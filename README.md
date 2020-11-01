@@ -1,7 +1,7 @@
 ## General Instructions
 1. Make your own branch
 2. Commit code to your branch.
-
+3. NO
 
 ## Important Git Commands
 
@@ -16,6 +16,10 @@
 
 **Move to another branch**
 `git checkout branchname`
+
+**Pull changes from another branch**
+`git pull origin <branch name>`
+
 
 ## Finally
 Let's play bois!!
