@@ -56,6 +56,58 @@ for i in results:
     print(dict(i))
 """
 
+def soil_fertility(fi, fs):
+    """Obtain Firtility Class from fertility Index"""
+    try:
+        if fi < 1.67:
+            fertility_status = "low"
+        if fi<=2.33 and fi>=1.67:
+            fertility_status =  "medium"
+        
+        else:
+            fertility_status = "high"
+            
+        if fertility_status == fs.lower():
+            trust = 1
+        else:
+            if fertility_status == "low" and fs.lower=="high":
+                trust = 0
+            else:
+                trust = 0.5
+        return calculatedFertilityStatus, calculatedTrust
+     
+    except Exception as e:
+        return str(e),''
+
+def scoring(score, distributorName, certified,stlName,seedGrowerName):
+    """
+    score: score provided by farmer
+    """
+    if score <= 2:
+        if certified == 'No':
+            stlScore = 2
+            distributorScore = 0
+            seedGrower = score
+        if certified == 'Yes':
+            stlScore = 0
+            distributorScore = 1
+            seedGrower = score
+    elif score >= 4:
+        if certified == 'Yes':
+            stlScore = 5
+            distributorScore = 5
+            seedGrower = score
+        elif certified == 'No':
+            stlScore = 2
+            distributorScore = 2
+            seedGrower = score
+    else:
+        stlScore = 3
+        distributorScore = 3
+        seedGrower = 3
+        
+    return {stlName:stlScore, distributorName:distributorScore, seedGrowerName:seedGrower}
+
 
 @app.route("/")
 def home():
@@ -74,15 +126,18 @@ def home():
 
     temp = dict(results[0])
     #print(temp)
+    name = temp["name"]
     type_login = temp["type"]
     if type_login == "farmer":
         #exec("farmer =" + temp["farmer"])
         #address = farmer["address"]
         session["login_type"]=type_login
+        session["name"]=name
         return render_template("index.html",login_type=type_login)
     else:
         agencyType = json.loads(temp["agency"])["agencyType"]
         session["login_type"]=agencyType
+        session["name"]=name
         return render_template("index.html",login_type=agencyType)
 
     
@@ -131,6 +186,7 @@ def login():
 def sign_out():
     session.pop('username',None)
     session.pop('login_type',None)
+    session.pop('name',None)
     return redirect(url_for("login"))
 
 @app.route("/register",methods=["POST","GET"])
@@ -175,7 +231,7 @@ def register_farmer():
         result = handle.put(req)
         if result.get_version() is not None:
             #return "successful"
-            return render_template("login.html")
+            return render_template(url_for("login"))
         else:
             flash("failed")
         
@@ -218,14 +274,14 @@ def register_agency():
             'agency':json.dumps(data["agency"])})
         result = handle.put(req)
         if result.get_version() is not None:
-            return render_template("login.html")
+            return redirect(url_for("login"))
         else:
             flash("failed")
 
     return render_template("agency_registration.html")
 
 @app.route("/distributor", methods=["POST","GET"])
-def distibutor_update():
+def distributor_update():
     if "username" not in session:
         return redirect(url_for("login"))
     if request.method == "POST":
@@ -243,7 +299,7 @@ def distibutor_update():
 
         data.pop("lotNumber")
         dict1 = json.loads(dict(results[0])["seed_data"])
-        data = {**data,**dict1}
+        data = {**dict1,**data}
 
         req = DeleteRequest().set_table_name('SEED_BLOCK')
         req.set_key({'lot_no': lno})
@@ -255,10 +311,12 @@ def distibutor_update():
                 'lot_no': lno,
                 'seed_data':json.dumps(data)})
             result = handle.put(req)
+            
         else:
             print("updation failed")
-
-    return render_template("distributer_update.html",login_type=session["login_type"])
+        return redirect(url_for("home"))
+    
+    return render_template("distributor_update.html",login_type=session["login_type"],name=session["name"])
 
 @app.route("/track_seed", methods=["POST","GET"])
 def track_seed():
@@ -324,7 +382,7 @@ def stl_update():
         return redirect(url_for("login"))
     if request.method == "POST":       
         data = request.form.to_dict(flat=True)
-        #print(data)
+        print(data)
 
         lno = data["lotNumber"]
 
@@ -339,7 +397,7 @@ def stl_update():
 
         data.pop("lotNumber")
         dict1 = json.loads(dict(results[0])["seed_data"])
-        data = {**data,**dict1}
+        data = {**dict1,**data}
 
         req = DeleteRequest().set_table_name('SEED_BLOCK')
         req.set_key({'lot_no': lno})
@@ -356,8 +414,9 @@ def stl_update():
 
         #currently redirects to login page after you signup
         return redirect(url_for("home"))
-    
-    return render_template("stl_update_seed.html",login_type=session["login_type"])
+    #print("hello")
+    #print(session["name"])  
+    return render_template("stl_update_seed.html",login_type=session["login_type"],name=session["name"])
 
 
 @app.route("/sca", methods=["GET", "POST"])
@@ -381,7 +440,7 @@ def sca_update():
 
         data.pop("lotNumber")
         dict1 = json.loads(dict(results[0])["seed_data"])
-        data = {**data,**dict1}
+        data = {**dict1,**data}
 
         req = DeleteRequest().set_table_name('SEED_BLOCK')
         req.set_key({'lot_no': lno})
@@ -400,7 +459,7 @@ def sca_update():
         #currently redirects to login page after you signup
         return redirect(url_for("home"))
     
-    return render_template("sca_update_seed.html",login_type=session["login_type"])
+    return render_template("sca_update_seed.html",login_type=session["login_type"],name=session["name"])
 
 @app.route("/spp",methods=["GET","POST"])
 def spp_update():
@@ -422,7 +481,7 @@ def spp_update():
 
         data.pop("lotNumber")
         dict1 = json.loads(dict(results[0])["seed_data"])
-        data = {**data,**dict1}
+        data = {**dict1,**data}
 
         req = DeleteRequest().set_table_name('SEED_BLOCK')
         req.set_key({'lot_no': lno})
