@@ -449,7 +449,8 @@ def sca_update():
                 break
 
         data.pop("lotNumber")
-        # blockchain.updateCertification(ID, data)
+        id = sql.returnUUIDLotNumber(lno)
+        blockchain.updateCertification(id, data)
         dict1 = json.loads(dict(results[0])["seed_data"])
         data = {**dict1,**data}
 
@@ -491,8 +492,6 @@ def spp_update():
                 break
 
         data.pop("lotNumber")
-        # blockchain.
-        print(data)
         dict1 = json.loads(dict(results[0])["seed_data"])
         data = {**dict1,**data}
 

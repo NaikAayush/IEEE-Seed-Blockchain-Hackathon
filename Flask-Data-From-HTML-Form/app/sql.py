@@ -23,6 +23,7 @@ def updateSampleSecretCode(lotNumber,sampleSecretCode):
     val = (sampleSecretCode, lotNumber)
     mycursor.execute(sql, val)
     mydb.commit()
+
 def returnUUIDSSC(sampleSecretCode):
     sql = "SELECT uuid FROM seed  WHERE sampleSecretCode=%s"
     val = (sampleSecretCode,)
@@ -33,6 +34,18 @@ def returnUUIDSSC(sampleSecretCode):
         return myresult
     except:
         return None
+
+def returnUUIDLotNumber(lotNumber):
+    sql = "SELECT uuid FROM seed  WHERE lotNumber=%s"
+    val = (lotNumber,)
+    mycursor.execute(sql, val)
+    myresult = mycursor.fetchall()
+    try:
+        myresult = myresult[0][0]
+        return myresult
+    except:
+        return None
+
 def updateTagStuff(sampleSecretCode,tagSeries,tagStart,tagEnd):
     sql = "UPDATE seed SET tagSeries=%s,tagStart=%s,tagEnd=%s WHERE sampleSecretCode=%s"
     val = (tagSeries, int(tagStart), int(tagEnd), sampleSecretCode)
