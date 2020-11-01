@@ -394,6 +394,7 @@ def stl_update():
         print(data)
 
         lno = data["lotNumber"]
+        sampleSecretCode = data["sampleSecretCode"]
 
         statement = 'select * from SEED_BLOCK where lot_no = "{}"'.format(lno)
         req = QueryRequest().set_statement(statement)
@@ -405,7 +406,8 @@ def stl_update():
                 break
 
         data.pop("lotNumber")
-        # blockchain.updateTest(ID, data)
+        id = sql.returnUUIDSSC(sampleSecretCode)
+        blockchain.updateTest(id, data)
         dict1 = json.loads(dict(results[0])["seed_data"])
         data = {**dict1,**data}
 
