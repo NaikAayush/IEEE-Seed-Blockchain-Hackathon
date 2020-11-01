@@ -330,7 +330,7 @@ def track_seed():
         tno = data["tagNumber"]
         lno = sql.returnLotNumber(tno)
         uuid = sql.returnUUIDtag(tno)
-        seed_data = blockchain.getHistory(uuid)
+        seed_data = blockchain.query(uuid)
         #print(lno)
         # statement = 'select seed_data from SEED_BLOCK where lot_no = "{}"'.format(lno)
         # req = QueryRequest().set_statement(statement)
