@@ -556,7 +556,7 @@ def spp_update():
 
     return render_template("spp_update_seed.html",login_type=session["login_type"])
 
-@app.route("/review")
+@app.route("/review",methods=["GET"])
 def review():
     return render_template("review.html")
 
