@@ -66,3 +66,18 @@ def returnUUIDtag(tag):
         return myresult
     except:
         return None
+
+def returnLotNumber(tag):
+    arr = tag.split('-')
+    tagSeries = arr[0]
+    tagNo = int(arr[1])
+
+    sql = "SELECT lotNumber WHERE tagSeries=%s AND %s BETWEEN tagStart AND tagEnd"
+    val = (tagSeries, tagNo)
+    mycursor.execute(sql, val)
+    myresult = mycursor.fetchall()
+    try:
+        myresult = myresult[0][0]
+        return myresult
+    except:
+        return None
