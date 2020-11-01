@@ -351,6 +351,37 @@ def track_seed():
     data=[]
     return render_template("track_seed.html",login_type=session["login_type"],data=data)
 
+@app.route("/history", methods=["POST","GET"])
+def track_seed():
+    if "username" not in session:
+        return redirect(url_for("login"))
+    if request.method == "POST":
+        data = request.form.to_dict(flat=True)
+        tno = data["tagNumber"]
+        lno = sql.returnLotNumber(tno)
+        uuid = sql.returnUUIDtag(tno)
+        print(uuid)
+        seed_data_a = blockchain.getHistory(uuid)
+        print(seed_data_a)
+        return jsonify(seed_data_a)
+        
+        # print(lno)
+        # statement = 'select seed_data from SEED_BLOCK where lot_no = "{}"'.format(lno)
+        # req = QueryRequest().set_statement(statement)
+        # results = []
+        # while True:
+        #     result = handle.query(req).get_results()
+        #     results = results + result# do something with results
+        #     if req.is_done():
+        #         break
+        # print(results)
+        # seed_data = json.loads(dict(results[0])["seed_data"])
+        # print(seed_data)
+        # print(type(seed_data))        
+    #     return render_template("track_seed.html",data=seed_data_a,login_type=session["login_type"])
+    data=[]
+    return render_template("track_seed.html",login_type=session["login_type"],data=data)
+
 @app.route("/spa", methods=["GET", "POST"])
 def spa_create():
     if "username" not in session:
@@ -484,7 +515,6 @@ def sca_update():
 
         #currently redirects to login page after you signup
         return redirect(url_for("home"))
-
     return render_template("sca_update_seed.html",login_type=session["login_type"],name=session["name"])
 
 @app.route("/spp",methods=["GET","POST"])
