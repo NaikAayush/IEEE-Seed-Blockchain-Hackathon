@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Storehouse Update Seed</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" href="../static/css/distributor_update_styles.min.css">
+</head>
+
+<body style="background: url(&quot;../static/img/photo-1557234195-bd9f290f0e4d.jpg&quot;) center / cover repeat-y;backdrop-filter: blur(5px);height: 100vh;">
+    <nav class="navbar navbar-light navbar-expand-md navigation-clean" style="background: rgba(0,0,0,0);">
+        <div class="container"><a class="navbar-brand" href="{{ url_for('home') }}" style="color: #ffffff;">ORANGE</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div
+                class="collapse navbar-collapse" id="navcol-1">
+                <ul class="nav navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link active" href="{{ url_for('home') }}" style="color: #ffffff;">HOME</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('missions') }}" style="color: #ffffff;">MISSIONS</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('track_seed') }}" style="color: #ffffff;">TRACK SEED</a></li>
+                    {% if login_type == "farmer" %}
+                    {% else %}
+                        {% if login_type == "spa" %}
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('spa_create') }}" style="color: #ffffff;">HANDLE SEED</a></li>
+                        {% else %}
+                            {% if login_type == "spp" %}
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('spp_update') }}" style="color: #ffffff;">HANDLE SEED</a></li>
+                            {% else %}
+                                {% if login_type == "sca" %}
+                                <li class="nav-item"><a class="nav-link" href="{{ url_for('sca_update') }}" style="color: #ffffff;">HANDLE SEED</a></li>
+                                {% else %}
+                                    {% if login_type == "stl" %}
+                                    <li class="nav-item"><a class="nav-link" href="{{ url_for('stl_update') }}" style="color: #ffffff;">HANDLE SEED</a></li>
+                                    {% else %}
+                                        {% if login_type == "distributor" %}
+                                        <li class="nav-item"><a class="nav-link" href="{{ url_for('distributor_update') }}" style="color: #ffffff;">HANDLE SEED</a></li>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('sign_out') }}" style="color: #ffffff;">SIGN OUT</a></li>
+                </ul>
+        </div>
+        </div>
+    </nav>
+</body>
+</html>
