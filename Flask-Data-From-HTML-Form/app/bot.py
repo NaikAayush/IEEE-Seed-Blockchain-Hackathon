@@ -86,7 +86,7 @@ def main():
                         "text" in update["message"] and \
                         not update["message"]["from"]["is_bot"] and \
                         "reply_to_message" not in update["message"]:
-                    text = update["message"]["text"].lower()
+                    text = update["message"]["text"]
                     text = text.replace(BOT_TAG, "")
                     print(f"\nGot message '{text}'"
                           f"from chat_id {update['message']['chat']['id']}")
@@ -102,8 +102,9 @@ def main():
                                      update['message']['chat']['id'])
                     else:
                         seed_data_a = blockchain.getHistory(uuid)
-                        print(seed_data_a)
-                        send_message(str(seed_data_a), update['message']['chat']['id'])
+                        data = pprint.pformat(seed_data_a)
+                        print(data)
+                        send_message(data, update['message']['chat']['id'])
 
                 with open(LAST_UPDATE_FILE, "wt") as f:
                     last_update = update["update_id"] + 1
