@@ -4,25 +4,25 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>stl_update</title>
+    <title>STL Update Seed</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
-    <link rel="stylesheet" href="../static/css/stl_update_styles.min.css">
+    <link rel="stylesheet" href="../static/css/stl_update_seed_styles.min.css">
 </head>
 
-<body style="background: url(&quot;../static/img/common_reg_and_form_photo-1557234195-bd9f290f0e4d.jpg&quot;) center / cover repeat-y;backdrop-filter: blur(5px);height: 100vh;">
+<body style="background: url(&quot;../static/img/photo-1557234195-bd9f290f0e4d.jpg&quot;) center / cover repeat-y;backdrop-filter: blur(5px);height: 100vh;">
     <nav class="navbar navbar-light navbar-expand-md navigation-clean" style="background: rgba(0,0,0,0);">
-        <div class="container"><a class="navbar-brand" href="#" style="color: #ffffff;">ORANGE</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+        <div class="container"><a class="navbar-brand" href="{{ url_for('home') }}" style="color: #ffffff;">ORANGE</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
             <div
                 class="collapse navbar-collapse" id="navcol-1">
                 <ul class="nav navbar-nav ml-auto">
-                    <li class="nav-item"><a class="nav-link active" href="#" style="color: #ffffff;">HOME</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#" style="color: #ffffff;">MISSIONS</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#" style="color: #ffffff;">TRACK SEED</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#" style="color: #ffffff;">CREATE SEED</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="#" style="color: #ffffff;">UPDATE SEED</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('home') }}" style="color: #ffffff;">HOME</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('missions') }}" style="color: #ffffff;">MISSIONS</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('track_seed') }}" style="color: #ffffff;">TRACK SEED</a></li>
                     <li class="nav-item"></li>
-                    <li class="nav-item"><a class="nav-link active" href="#" style="color: #ffffff;">SIGN OUT</a></li>
+                    <li class="nav-item"><a class="nav-link active" style="color: #ffffff;">HANDLE SEED</a></li>
+                    <li class="nav-item"></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('sign_out') }}" style="color: #ffffff;">SIGN OUT</a></li>
                 </ul>
         </div>
         </div>
@@ -40,14 +40,20 @@
                         </thead>
                         <tbody>
                             <tr>
+                                <td style="width: 250px;height: 45px;text-align: center;padding: 20px;"><strong>Lot Number</strong></td>
+                                <td style="width: 250px;height: 45px;"><input class="form-control" type="text" value="APR19-33-028-117(2)" name="lotNumber"></td>
+                            </tr>
+                            <tr>
                                 <td style="width: 250px;height: 45px;text-align: center;padding: 20px;"><strong>Sample Secret Code</strong></td>
                                 <td style="width: 250px;height: 45px;"><input class="form-control" type="password" value="abcd1234" name="sampleSecretCode"></td>
                             </tr>
                             <tr>
                                 <td style="width: 250px;height: 45px;text-align: center;padding: 20px;"><strong>Sampled Passed</strong></td>
                                 <td style="width: 250px;height: 45px;">
-                                    <div class="form-check" style="width: 250px;"><input class="form-check-input" type="radio" id="formCheck-1" name="samplePassed" value="yes"><label class="form-check-label" for="formCheck-1">Yes</label></div>
-                                    <div class="form-check" name="" style="width: 250px;"><input class="form-check-input" type="radio" id="formCheck-2" name="samplePassed" value="no"><label class="form-check-label" for="formCheck-2">No</label></div>
+                                    <div class="form-group"><select class="form-control" name="agencyType" name="agencyType">
+                                        <option value="Yes" selected>Yes</option>
+                                        <option value="No">No</option>
+                                    </select></div>
                                 </td>
                             </tr>
                             <tr>
@@ -55,7 +61,7 @@
                                 <td style="width: 250px;height: 45px;"><input class="form-control" type="text" name="sampleTestDate"></td>
                             </tr>
                             <tr>
-                                <td style="width: 250px;height: 45px;text-align: center;padding: 22px;" colspan="1"></td>
+                                <td style="width: 250px;height: 45px;"><input class="form-control" type="hidden" name="stlName" value="{{ name }}"></td>
                                 <td><button class="btn btn-primary btn-block" type="submit" style="background: rgba(38,159,86,0.94);width: 250px;">UPDATE seed block</button></td>
                             </tr>
                         </tbody>

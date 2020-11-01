@@ -20,7 +20,3 @@ def soil_fertility(fi, fs):
      
     except Exception as e:
         return str(e),''
-
-
-    
-    
