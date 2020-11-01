@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import current_user,login_user,logout_user,login_required
 import logging
 import os
+import sys
 import json
 import base64
 import hashlib
@@ -14,6 +15,8 @@ from borneo import TableLimits, TableRequest, PutRequest, QueryRequest, PrepareR
 from collections import OrderedDict
 import random
 import itertools
+import blockchain
+import sql
 
 app.secret_key = "somesecretkey"
 
@@ -63,10 +66,10 @@ def soil_fertility(fi, fs):
             fertility_status = "low"
         if fi<=2.33 and fi>=1.67:
             fertility_status =  "medium"
-        
+
         else:
             fertility_status = "high"
-            
+
         if fertility_status == fs.lower():
             trust = 1
         else:
@@ -75,7 +78,7 @@ def soil_fertility(fi, fs):
             else:
                 trust = 0.5
         return calculatedFertilityStatus, calculatedTrust
-     
+
     except Exception as e:
         return str(e),''
 
@@ -295,9 +298,10 @@ def distributor_update():
             result = handle.query(req).get_results()
             results = results + result# do something with results
             if req.is_done():
-                break    
+                break
 
         data.pop("lotNumber")
+        # blockchain.updateDist(ID, data)
         dict1 = json.loads(dict(results[0])["seed_data"])
         data = {**dict1,**data}
 
@@ -311,11 +315,11 @@ def distributor_update():
                 'lot_no': lno,
                 'seed_data':json.dumps(data)})
             result = handle.put(req)
-            
+
         else:
             print("updation failed")
         return redirect(url_for("home"))
-    
+
     return render_template("distributor_update.html",login_type=session["login_type"],name=session["name"])
 
 @app.route("/track_seed", methods=["POST","GET"])
@@ -345,10 +349,10 @@ def track_seed():
 def spa_create():
     if "username" not in session:
         return redirect(url_for("login"))
-    if request.method == "POST":       
+    if request.method == "POST":
         data = request.form.to_dict(flat=True)
         lno = data["lotNumber"]
-        
+
         statement = 'select * from SEED_BLOCK where lot_no = "{}"'.format(lno)
         req = QueryRequest().set_statement(statement)
         results = []
@@ -357,15 +361,20 @@ def spa_create():
             results = results + result# do something with results
             if req.is_done():
                 break
-        
+
         if len(results)==0:
+            id = sql.insertLotNumber(lno)
+            data["ID"] = id
+            blockchain.invoke(data)
+
+            data.pop("ID")
             data.pop("lotNumber")
             req = PutRequest().set_table_name('SEED_BLOCK')
             req.set_value({'lot_no': lno,'seed_data':json.dumps(data)})
             result = handle.put(req)
             if result.get_version() is not None:
                 return redirect(url_for("home"))
-               
+
         else:
             print("insertion failed")
 
@@ -380,7 +389,7 @@ def spa_create():
 def stl_update():
     if "username" not in session:
         return redirect(url_for("login"))
-    if request.method == "POST":       
+    if request.method == "POST":
         data = request.form.to_dict(flat=True)
         print(data)
 
@@ -393,9 +402,10 @@ def stl_update():
             result = handle.query(req).get_results()
             results = results + result# do something with results
             if req.is_done():
-                break    
+                break
 
         data.pop("lotNumber")
+        # blockchain.updateTest(ID, data)
         dict1 = json.loads(dict(results[0])["seed_data"])
         data = {**dict1,**data}
 
@@ -423,10 +433,10 @@ def stl_update():
 def sca_update():
     if "username" not in session:
         return redirect(url_for("login"))
-    if request.method == "POST":       
+    if request.method == "POST":
         data = request.form.to_dict(flat=True)
         #print(data)
-        
+
         lno = data["lotNumber"]
 
         statement = 'select * from SEED_BLOCK where lot_no = "{}"'.format(lno)
@@ -436,9 +446,10 @@ def sca_update():
             result = handle.query(req).get_results()
             results = results + result# do something with results
             if req.is_done():
-                break    
+                break
 
         data.pop("lotNumber")
+        # blockchain.updateCertification(ID, data)
         dict1 = json.loads(dict(results[0])["seed_data"])
         data = {**dict1,**data}
 
@@ -458,7 +469,7 @@ def sca_update():
 
         #currently redirects to login page after you signup
         return redirect(url_for("home"))
-    
+
     return render_template("sca_update_seed.html",login_type=session["login_type"],name=session["name"])
 
 @app.route("/spp",methods=["GET","POST"])
@@ -467,7 +478,7 @@ def spp_update():
         return redirect(url_for("login"))
     if request.method == "POST":
         data = request.form.to_dict(flat=True)
-            
+
         lno = data["lotNumber"]
 
         statement = 'select * from SEED_BLOCK where lot_no = "{}"'.format(lno)
@@ -477,9 +488,11 @@ def spp_update():
             result = handle.query(req).get_results()
             results = results + result# do something with results
             if req.is_done():
-                break    
+                break
 
         data.pop("lotNumber")
+        # blockchain.
+        print(data)
         dict1 = json.loads(dict(results[0])["seed_data"])
         data = {**dict1,**data}
 
@@ -499,13 +512,12 @@ def spp_update():
         return redirect(url_for("home"))
 
     return render_template("spp_update_seed.html",login_type=session["login_type"])
-                
-             
+
+
 """# handle login failed
 @app.errorhandler(401)
 def page_not_found(e):
     return Response('<p>Login failed</p>')
 """
 if __name__=="__main__":
-    app.debug=True
-    app.run()
+    app.run(debug=True, )
