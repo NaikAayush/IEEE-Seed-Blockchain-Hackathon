@@ -10,18 +10,20 @@ load_dotenv()
 
 
 SPA_URL=os.getenv("SPA_URL")
-SPA_CC=os.getenv("SPA_CC")
-SPA=os.getenv("SPA")
-SCA_URL=os.getenv("SCA_URL")
-SCA=os.getenv("SCA")
-RET_URL=os.getenv("RET_URL")
-RET=os.getenv("RET")
-FAR_URL=os.getenv("FAR_URL")
-FAR=os.getenv("FAR")
-STL_URL=os.getenv("STL_URL")
-STL=os.getenv("STL")
-chaincodeVer = "v1"
-
+chaincode="seedBlockk"
+chaincodeVer="v7"
+channel="orangechannel"
+# SPA_CC=os.getenv("SPA_CC")
+# SPA=os.getenv("SPA")
+# SPA_URL=os.getenv("SPA_URL")
+# chaincode=os.getenv("chaincode")
+# RET_URL=os.getenv("RET_URL")
+# RET=os.getenv("RET")
+# FAR_URL=os.getenv("FAR_URL")
+# FAR=os.getenv("FAR")
+# STL_URL=os.getenv("STL_URL")
+# STL=os.getenv("STL")
+# chaincodeVer = "v1"
 
 headers = {
   'Content-Type': 'application/json',
@@ -36,10 +38,6 @@ stl_keys = ["stlName", "samplePassed"]
 
 dist_keys = ["sourceDistributer", "storeHouseLocation", "humidityOfStorage", "temperatureOfStorage", "orderId"]
 
-channel = "orangechannel"
-chaincode = "seedBlockk"
-chaincodeVer = "v6"
-
 def invoke(data):
     for k in sca_keys:
         data[k] = ""
@@ -50,8 +48,25 @@ def invoke(data):
 
     payload = {
         "args": ["invoke", data["ID"], json.dumps(data)],
-        "chaincode": SPA_CC,
-        "channel": SPA,
+        "chaincode": chaincode,
+        "channel": channel,
+        "chaincodeVer": chaincodeVer,
+        "method": "invoke"
+    }
+    pprint(payload)
+
+    response = requests.request("POST", SPA_URL, headers=headers, json=payload)
+
+    pprint(json.loads(response.text.encode('utf8')))
+    return json.loads(response.text.encode('utf8'))['result']['payload']
+
+def updateTest(ID,data):
+    data = {k:v for k,v in data.items() if k in stl_keys}
+
+    payload = {
+        "args": ["updateTest", ID, json.dumps(data)],
+        "chaincode": chaincode,
+        "channel": channel,
         "chaincodeVer": chaincodeVer,
         "method": "invoke"
     }
@@ -60,62 +75,47 @@ def invoke(data):
 
     return json.loads(response.text.encode('utf8'))['result']['payload']
 
-def updateTest(ID,data):
-    data = {k:v for k,v in data.items() if k in stl_keys}
-
-    payload = {
-        "args": ["updateTest", ID, json.dumps(data)],
-        "chaincode": STL,
-        "channel": STL,
-        "chaincodeVer": chaincodeVer,
-        "method": "invoke"
-    }
-
-    response = requests.request("POST", STL_URL, headers=headers, json=payload)
-
-    return json.loads(response.text.encode('utf8'))['result']['payload']
-
 def updateCertification(ID, data):
     data = {k:v for k,v in data.items() if k in sca_keys}
+    print(data)
     payload = {
         "args": ["updateCertification", ID, json.dumps(data)],
-        "chaincode": SCA,
-        "channel": SCA,
+        "chaincode": chaincode,
+        "channel": channel,
         "chaincodeVer": chaincodeVer,
         "method": "invoke"
     }
+    pprint(payload)
 
-    response = requests.request("POST", SCA_URL, headers=headers, json=payload)
+    response = requests.request("POST", SPA_URL, headers=headers, json=payload)
+
     print(json.loads(response.text.encode('utf8')))
-
-    print(response)
-
     return json.loads(response.text.encode('utf8'))['result']['payload']
 
 def updateDist(ID, data):
     data = {k:v for k,v in data.items() if k in dist_keys}
     payload = {
         "args": ["updateDist", ID, json.dumps(data)],
-        "chaincode": RET,
-        "channel": RET,
+        "chaincode": chaincode,
+        "channel": channel,
         "chaincodeVer": chaincodeVer,
         "method": "invoke"
     }
 
-    response = requests.request("POST", RET_URL, headers=headers, json=payload)
+    response = requests.request("POST", SPA_URL, headers=headers, json=payload)
 
     return json.loads(response.text.encode('utf8'))['result']['payload']
 
 def getHistory(ID):
     payload = {
         "args": ["getHistory", ID],
-        "chaincode": FAR,
-        "channel": FAR,
+        "chaincode": chaincode,
+        "channel": channel,
         "chaincodeVer": chaincodeVer,
         "method": "invoke"
     }
 
-    response = requests.request("POST", FAR_URL, headers=headers, json=payload)
+    response = requests.request("POST", SPA_URL, headers=headers, json=payload)
 
     return json.loads(response.text.encode('utf8'))['result']['payload']
 
@@ -128,6 +128,6 @@ def query(ID):
         "method": "invoke"
     }
 
-    response = requests.request("POST", url, headers=headers, json=payload)
+    response = requests.request("POST", SPA_URL, headers=headers, json=payload)
 
     return json.loads(response.text.encode('utf8'))['result']['payload']
