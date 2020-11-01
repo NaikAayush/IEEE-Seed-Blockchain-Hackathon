@@ -57,7 +57,7 @@ def returnUUIDtag(tag):
     tagSeries = arr[0]
     tagNo = int(arr[1])
 
-    sql = "SELECT uuid WHERE tagSeries=%s AND %s BETWEEN tagStart AND tagEnd"
+    sql = "SELECT uuid FROM seed WHERE tagSeries=%s AND %s BETWEEN tagStart AND tagEnd"
     val = (tagSeries, tagNo)
     mycursor.execute(sql, val)
     myresult = mycursor.fetchall()
@@ -72,7 +72,7 @@ def returnLotNumber(tag):
     tagSeries = arr[0]
     tagNo = int(arr[1])
 
-    sql = "SELECT lotNumber WHERE tagSeries=%s AND %s BETWEEN tagStart AND tagEnd"
+    sql = "SELECT lotNumber FROM seed WHERE tagSeries=%s AND %s BETWEEN tagStart AND tagEnd"
     val = (tagSeries, tagNo)
     mycursor.execute(sql, val)
     myresult = mycursor.fetchall()
