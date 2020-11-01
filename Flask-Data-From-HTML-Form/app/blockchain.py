@@ -86,7 +86,7 @@ def updateCertification(ID, data):
     }
 
     response = requests.request("POST", SCA_URL, headers=headers, json=payload)
-    print('result')
+    print(response)
 
     return json.loads(response.text.encode('utf8'))['result']['payload']
 
