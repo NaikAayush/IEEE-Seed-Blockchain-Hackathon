@@ -70,9 +70,11 @@ def updateTest(ID,data):
         "chaincodeVer": chaincodeVer,
         "method": "invoke"
     }
+    pprint(payload)
 
     response = requests.request("POST", SPA_URL, headers=headers, json=payload)
 
+    pprint(json.loads(response.text.encode('utf8')))
     return json.loads(response.text.encode('utf8'))['result']['payload']
 
 def updateCertification(ID, data):
