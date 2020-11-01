@@ -460,8 +460,8 @@ def sca_update():
         id = sql.returnUUIDLotNumber(lno)
         sampleSecretCode = data["sampleSecretCode"]
         tagSeries = data["tagSeries"]
-        tagStart = data["tagStart"]
-        tagEnd = data["tagEnd"]
+        tagStart = data["tagIssuedRangeFrom"]
+        tagEnd = data["tagIssuedRangeTo"]
         sql.updateSampleSecretCode(lno,sampleSecretCode)
         sql.updateTagStuff(sampleSecretCode,tagSeries,tagStart,tagEnd)
         blockchain.updateCertification(id, data)
