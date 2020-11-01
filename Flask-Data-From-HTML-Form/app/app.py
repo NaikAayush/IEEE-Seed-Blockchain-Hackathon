@@ -352,7 +352,7 @@ def track_seed():
     return render_template("track_seed.html",login_type=session["login_type"],data=data)
 
 @app.route("/history", methods=["POST","GET"])
-def track_seed():
+def history():
     if "username" not in session:
         return redirect(url_for("login"))
     if request.method == "POST":
