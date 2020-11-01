@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xml:lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>feedback</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" href="../static/css/styles.min.css">
+</head>
+
+<body style="background: url(&quot;assets/img/photo-1557234195-bd9f290f0e4d.jpg&quot;) center / cover no-repeat;backdrop-filter: blur(5px);height: 100vh;">
+    <nav class="navbar navbar-light navbar-expand-md navigation-clean" style="background: rgba(0,0,0,0);">
+        <div class="container"><a class="navbar-brand" href="#" style="color: #ffffff;">ORANGE</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div
+                class="collapse navbar-collapse" id="navcol-1">
+                <ul class="nav navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('home') }}" style="color: #ffffff;">HOME</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('missions') }}" style="color: #ffffff;">MISSIONS</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('track_seed') }}"style="color: #ffffff;">TRACK SEED</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('log_out') }}" style="color: #ffffff;">LOGOUT</a></li>
+                </ul>
+        </div>
+        </div>
+    </nav>
+    <div class="contact-clean" style="background: rgba(0,0,0,0);">
+        <form method="post">
+            <h2 class="text-center">Your Feedback Helps us Improve!</h2>
+            <div class="form-group"><input class="form-control" type="text" name="orderId" placeholder="Order ID"></div>
+            <div class="form-group"><input class="form-control-range" type="range" name="rating" min="0" max="5" step="1"></div>
+            <div class="form-group"><textarea class="form-control" name="reviews" placeholder="Write a Review" rows="14"></textarea></div>
+            <div class="form-group"><button class="btn btn-primary" type="submit">send </button></div>
+        </form>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
