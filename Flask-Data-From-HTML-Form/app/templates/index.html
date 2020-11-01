@@ -1,49 +1,203 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Storehouse Update Seed</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
-    <link rel="stylesheet" href="../static/css/distributor_update_styles.min.css">
-</head>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+    />
+    <title>Orange</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css"
+    />
+    <link rel="stylesheet" href="../static/css/home_styles.min.css" />
+  </head>
 
-<body style="background: url(&quot;../static/img/photo-1557234195-bd9f290f0e4d.jpg&quot;) center / cover repeat-y;backdrop-filter: blur(5px);height: 100vh;">
-    <nav class="navbar navbar-light navbar-expand-md navigation-clean" style="background: rgba(0,0,0,0);">
-        <div class="container"><a class="navbar-brand" href="{{ url_for('home') }}" style="color: #ffffff;">ORANGE</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
-            <div
-                class="collapse navbar-collapse" id="navcol-1">
-                <ul class="nav navbar-nav ml-auto">
-                    <li class="nav-item"><a class="nav-link active" href="{{ url_for('home') }}" style="color: #ffffff;">HOME</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('missions') }}" style="color: #ffffff;">MISSIONS</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('track_seed') }}" style="color: #ffffff;">TRACK SEED</a></li>
-                    {% if login_type == "farmer" %}
-                    {% else %}
-                        {% if login_type == "spa" %}
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('spa_create') }}" style="color: #ffffff;">HANDLE SEED</a></li>
-                        {% else %}
-                            {% if login_type == "spp" %}
-                            <li class="nav-item"><a class="nav-link" href="{{ url_for('spp_update') }}" style="color: #ffffff;">HANDLE SEED</a></li>
-                            {% else %}
-                                {% if login_type == "sca" %}
-                                <li class="nav-item"><a class="nav-link" href="{{ url_for('sca_update') }}" style="color: #ffffff;">HANDLE SEED</a></li>
-                                {% else %}
-                                    {% if login_type == "stl" %}
-                                    <li class="nav-item"><a class="nav-link" href="{{ url_for('stl_update') }}" style="color: #ffffff;">HANDLE SEED</a></li>
-                                    {% else %}
-                                        {% if login_type == "distributor" %}
-                                        <li class="nav-item"><a class="nav-link" href="{{ url_for('distributor_update') }}" style="color: #ffffff;">HANDLE SEED</a></li>
-                                        {% endif %}
-                                    {% endif %}
-                                {% endif %}
-                            {% endif %}
-                        {% endif %}
-                    {% endif %}
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('sign_out') }}" style="color: #ffffff;">SIGN OUT</a></li>
-                </ul>
+  <body
+    style="
+      background: url('../static/img/photo-1557234195-bd9f290f0e4d.jpg') center /
+        cover no-repeat;
+      backdrop-filter: blur(5px);
+      height: 100vh;
+    "
+  >
+    <nav
+      class="navbar navbar-light navbar-expand-md navigation-clean"
+      style="background: rgba(0, 0, 0, 0)"
+    >
+      <div class="container">
+        <a class="navbar-brand" href="#" style="color: #ffffff">ORANGE</a
+        ><button
+          data-toggle="collapse"
+          class="navbar-toggler"
+          data-target="#navcol-1"
+        >
+          <span class="sr-only">Toggle navigation</span
+          ><span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navcol-1">
+          <ul class="nav navbar-nav ml-auto">
+            <li class="nav-item">
+              <a
+                class="nav-link active"
+                href="{{ url_for('home') }}"
+                style="color: #ffffff"
+                >HOME</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="{{ url_for('missions') }}"
+                style="color: #ffffff"
+                >MISSIONS</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="{{ url_for('track_seed') }}"
+                style="color: #ffffff"
+                >TRACK SEED</a
+              >
+            </li>
+            {% if login_type == "farmer" %} {% else %} {% if login_type == "spa"
+            %}
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="{{ url_for('spa_create') }}"
+                style="color: #ffffff"
+                >HANDLE SEED</a
+              >
+            </li>
+            {% else %} {% if login_type == "spp" %}
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="{{ url_for('spp_update') }}"
+                style="color: #ffffff"
+                >HANDLE SEED</a
+              >
+            </li>
+            {% else %} {% if login_type == "sca" %}
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="{{ url_for('sca_update') }}"
+                style="color: #ffffff"
+                >HANDLE SEED</a
+              >
+            </li>
+            {% else %} {% if login_type == "stl" %}
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="{{ url_for('stl_update') }}"
+                style="color: #ffffff"
+                >HANDLE SEED</a
+              >
+            </li>
+            {% else %} {% if login_type == "distributor" %}
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="{{ url_for('distributor_update') }}"
+                style="color: #ffffff"
+                >HANDLE SEED</a
+              >
+            </li>
+            {% endif %} {% endif %} {% endif %} {% endif %} {% endif %} {% endif
+            %} {% if login_type == "" %}
+            <li class="nav-item">
+              <a
+                class="nav-link active"
+                href="{{ url_for('login') }}"
+                style="color: #ffffff"
+                >LOGIN</a
+              >
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a
+                class="nav-link active"
+                href="{{ url_for('log_out') }}"
+                style="color: #ffffff"
+                >LOG OUT</a
+              >
+            </li>
+            {% endif %}
+          </ul>
         </div>
-        </div>
+      </div>
     </nav>
-</body>
+    <div class="article-list" style="background: rgba(0, 0, 0, 0)">
+      <div class="container">
+        <div class="intro">
+          <h2 class="text-center" style="color: #ffffff">WHY US?</h2>
+        </div>
+        <div class="row articles">
+          <div class="col-sm-6 col-md-4 item" style="background: #ffffff">
+            <a href="#"><img class="img-fluid" src="assets/img/desk.jpg" /></a>
+            <h3 class="name">TRANSPARENCY</h3>
+            <p class="description">
+              You as a user can track the seed anywhere, anytime! Just login and
+              enter your unique Tag ID. You can see where your seeds are and how
+              they are doing!
+            </p>
+          </div>
+          <div class="col-sm-6 col-md-4 item" style="background: #f1f7fc">
+            <a href="#"
+              ><img class="img-fluid" src="assets/img/building.jpg"
+            /></a>
+            <h3 class="name">SECURITY</h3>
+            <p class="description">
+              The use of Block-Chain makes it next to impossible to tamper with
+              your information! One small change in the Block-Chain can be
+              easily detected by our team within seconds and dealt with
+              accordingly.
+            </p>
+          </div>
+          <div class="col-sm-6 col-md-4 item" style="background: #ffffff">
+            <a href="#"><img class="img-fluid" src="assets/img/loft.jpg" /></a>
+            <h3 class="name">SCALABILITY</h3>
+            <p class="description">
+              The use of NoSQL along with Block-Chain allows us to reach the
+              Skies! With a large market demand we are ever ready to serve new
+              people everyday.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-basic">
+      <footer>
+        <div class="social">
+          <a href="#"><i class="icon ion-social-instagram"></i></a
+          ><a href="#"><i class="icon ion-social-snapchat"></i></a
+          ><a href="#"><i class="icon ion-social-twitter"></i></a
+          ><a href="#"><i class="icon ion-social-facebook"></i></a>
+        </div>
+        <ul class="list-inline">
+          <li class="list-inline-item"></li>
+          <li class="list-inline-item">
+            <a href="{{ url_for('review') }}">Review Our Services</a>
+          </li>
+          <li class="list-inline-item"><a href="#">Privacy Policy</a></li>
+        </ul>
+        <p class="copyright">Orange © 2020</p>
+      </footer>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+  </body>
 </html>
