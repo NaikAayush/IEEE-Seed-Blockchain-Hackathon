@@ -1,99 +1,445 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+    />
     <title>SCA Update Seed</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
-    <link rel="stylesheet" href="../static/css/sca_update_seed_styles.min.css">
-</head>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto"
+    />
+    <link
+      rel="stylesheet"
+      href="../static/css/sca_update_seed_styles.min.css"
+    />
+  </head>
 
-<body style="background: url(&quot;../static/img/photo-1557234195-bd9f290f0e4d.jpg&quot;) center / cover repeat-y;backdrop-filter: blur(5px);height: 100vh;">
-    <nav class="navbar navbar-light navbar-expand-md navigation-clean" style="background: rgba(0,0,0,0);">
-        <div class="container"><a class="navbar-brand" href="{{ url_for('home') }}" style="color: #ffffff;">ORANGE</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
-            <div
-                class="collapse navbar-collapse" id="navcol-1">
-                <ul class="nav navbar-nav ml-auto">
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('home') }}" style="color: #ffffff;">HOME</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('missions') }}" style="color: #ffffff;">MISSIONS</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('track_seed') }}" style="color: #ffffff;">TRACK SEED</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="{{ url_for('track_seed') }}" style="color: #ffffff;">HANDLE SEED</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('sign_out') }}" style="color: #ffffff;">SIGN OUT</a></li>
-                </ul>
+  <body
+    style="
+      background: url('../static/img/photo-1557234195-bd9f290f0e4d.jpg') center /
+        cover repeat-y;
+      backdrop-filter: blur(5px);
+      height: 100vh;
+    "
+  >
+    <nav
+      class="navbar navbar-light navbar-expand-md navigation-clean"
+      style="background: rgba(0, 0, 0, 0)"
+    >
+      <div class="container">
+        <a
+          class="navbar-brand"
+          href="{{ url_for('home') }}"
+          style="color: #ffffff"
+          >ORANGE</a
+        ><button
+          data-toggle="collapse"
+          class="navbar-toggler"
+          data-target="#navcol-1"
+        >
+          <span class="sr-only">Toggle navigation</span
+          ><span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navcol-1">
+          <ul class="nav navbar-nav ml-auto">
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="{{ url_for('home') }}"
+                style="color: #ffffff"
+                >HOME</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="{{ url_for('missions') }}"
+                style="color: #ffffff"
+                >MISSIONS</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="{{ url_for('track_seed') }}"
+                style="color: #ffffff"
+                >TRACK SEED</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link active"
+                href="{{ url_for('track_seed') }}"
+                style="color: #ffffff"
+                >HANDLE SEED</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="{{ url_for('sign_out') }}"
+                style="color: #ffffff"
+                >SIGN OUT</a
+              >
+            </li>
+          </ul>
         </div>
-        </div>
+      </div>
     </nav>
-    <div class="border rounded newsletter-subscribe" style="margin-left: 60px;margin-right: 60px;margin-top: 50px;margin-bottom: 50px;">
-        <div class="container">
-            <div class="intro">
-                <h2 class="text-center" style="font-family: Roboto, sans-serif;">Enter Seed Block Details</h2>
-            </div>
-            <form class="form-inline" method="post">
-                <div class="table-responsive table-borderless">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr></tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td style="width: 250px;height: 45px;text-align: center;padding: 20px;"><strong>Lot Number</strong></td>
-                                <td style="width: 250px;height: 45px;"><input class="form-control" type="text" name="lotNumber" value="APR19-33-028-117(2)"></td>
-                                <td style="width: 250px;height: 45px;text-align: center;padding: 0px;padding-top: 20px;"><strong>Total Quantity Processed</strong><br></td>
-                                <td style="width: 250px;height: 45px;" name="owner" value="OSSC"><input class="form-control" type="text" value="55.5" name="totalQuantityProduced"></td>
-                            </tr>
-                            <tr>
-                                <td style="width: 250px;height: 45px;text-align: center;padding: 20px;"><strong>Processing Date</strong><br></td>
-                                <td style="width: 250px;height: 45px;"><input class="form-control" type="text" name="processingDate"></td>
-                                <td style="width: 250px;height: 45px;text-align: center;padding: 0px;padding-top: 20px;"><strong>Verification Date</strong><br></td>
-                                <td style="width: 250px;height: 45px;"><input class="form-control" type="text" name="verificationDate"></td>
-                            </tr>
-                            <tr>
-                                <td style="width: 250px;height: 45px;text-align: center;padding: 20px;"><strong>Sample Secret Code</strong><br></td>
-                                <td style="width: 250px;height: 45px;"><input class="form-control" type="password" name="sampleSecretCode" value="abcd1234"></td>
-                                <td style="width: 250px;height: 45px;text-align: center;padding: 0px;padding-top: 20px;"><strong>Sample Passed</strong><br></td>
-                                <td style="width: 250px;height: 45px;">
-                                    <div class="form-check" name="samplePassed"><input class="form-check-input" type="radio" id="formCheck-1" name="samplePassed"><label class="form-check-label" for="formCheck-1">Yes</label></div>
-                                    <div class="form-check" name=""><input class="form-check-input" type="radio" id="formCheck-2" name="samplePassed"><label class="form-check-label" for="formCheck-2">No</label></div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="width: 250px;height: 45px;text-align: center;padding: 20px;"><strong>Sample Test Date</strong><br></td>
-                                <td style="width: 250px;height: 45px;"><input class="form-control" type="text" name="sampleTestDate"></td>
-                                <td style="width: 250px;height: 45px;text-align: center;padding: 0px;padding-top: 20px;" name="sourceQuantity" value=""><strong>Certificate Number</strong><br></td>
-                                <td style="width: 250px;height: 45px;"><input class="form-control" type="text" name="certificateNumber"></td>
-                            </tr>
-                            <tr>
-                                <td style="width: 250px;height: 45px;text-align: center;padding: 20px;"><strong>Certificate Date</strong><br></td>
-                                <td style="width: 250px;height: 45px;"><input class="form-control" type="text" name="certificateDate"></td>
-                                <td style="width: 250px;height: 45px;text-align: center;padding: 0px;padding-top: 20px;"><strong>Tag&nbsp;Series</strong><br></td>
-                                <td style="width: 250px;height: 45px;"><input class="form-control" type="text" name="tagSeries" value="C7577"></td>
-                            </tr>
-                            <tr>
-                                <td style="width: 250px;height: 45px;text-align: center;padding: 20px;"><strong>Tag Issued Range From</strong><br></td>
-                                <td style="width: 250px;height: 45px;"><input class="form-control" type="text" name="tagIssuedRangeFrom" value="C7577-4499115"></td>
-                                <td style="width: 250px;height: 45px;text-align: center;padding: 0px;padding-top: 20px;"><strong>Tag Issued Range To</strong><br><br></td>
-                                <td style="width: 250px;height: 45px;"><input class="form-control" type="text" name="tagIssuedRangeTo" value="C7577-4499534"></td>
-                            </tr>
-                            <tr>
-                                <td style="width: 250px;height: 45px;text-align: center;padding: 20px;"><strong>No. of Tags Issued</strong><br></td>
-                                <td style="width: 250px;height: 45px;"><input class="form-control" type="number" name="noOfTagsIssued" value="420"></td>
-                                <td style="width: 250px;height: 45px;text-align: center;padding: 20px;"><strong>Certificate Validity in Month</strong></td>
-                                <td style="width: 250px;height: 45px;"><input class="form-control" type="number" name="certificateValidityInMonth" value="9"></td>
-                            </tr>
-                            <tr>
-                                <td style="width: 250px;height: 45px;text-align: center;padding: 22px;" colspan="3"><input class="form-control" type="hidden" name="scaName" value="{{ name }}"></td>
-                                <td><button class="btn btn-primary btn-block" type="submit" style="background: rgba(38,159,86,0.94);width: 250px;">UPDATE seed block</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </form>
+    <div
+      class="border rounded newsletter-subscribe"
+      style="
+        margin-left: 60px;
+        margin-right: 60px;
+        margin-top: 50px;
+        margin-bottom: 50px;
+      "
+    >
+      <div class="container">
+        <div class="intro">
+          <h2 class="text-center" style="font-family: Roboto, sans-serif">
+            Enter Seed Block Details
+          </h2>
         </div>
+        <form class="form-inline" method="post">
+          <div class="table-responsive table-borderless">
+            <table class="table table-bordered">
+              <thead>
+                <tr></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td
+                    style="
+                      width: 250px;
+                      height: 45px;
+                      text-align: center;
+                      padding: 20px;
+                    "
+                  >
+                    <strong>Lot Number</strong>
+                  </td>
+                  <td style="width: 250px; height: 45px">
+                    <input
+                      class="form-control"
+                      type="text"
+                      name="lotNumber"
+                      value="APR19-33-028-117(2)"
+                    />
+                  </td>
+                  <td
+                    style="
+                      width: 250px;
+                      height: 45px;
+                      text-align: center;
+                      padding: 0px;
+                      padding-top: 20px;
+                    "
+                  >
+                    <strong>Total Quantity Processed</strong><br />
+                  </td>
+                  <td
+                    style="width: 250px; height: 45px"
+                    name="owner"
+                    value="OSSC"
+                  >
+                    <input
+                      class="form-control"
+                      type="text"
+                      value="55.5"
+                      name="totalQuantityProduced"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    style="
+                      width: 250px;
+                      height: 45px;
+                      text-align: center;
+                      padding: 20px;
+                    "
+                  >
+                    <strong>Processing Date</strong><br />
+                  </td>
+                  <td style="width: 250px; height: 45px">
+                    <input
+                      class="form-control"
+                      type="text"
+                      name="processingDate"
+                      id="myDate"
+                    />
+                  </td>
+                  <td
+                    style="
+                      width: 250px;
+                      height: 45px;
+                      text-align: center;
+                      padding: 0px;
+                      padding-top: 20px;
+                    "
+                  >
+                    <strong>Verification Date</strong><br />
+                  </td>
+                  <td style="width: 250px; height: 45px">
+                    <input
+                      class="form-control"
+                      type="text"
+                      name="verificationDate"
+                      id="myDate"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    style="
+                      width: 250px;
+                      height: 45px;
+                      text-align: center;
+                      padding: 20px;
+                    "
+                  >
+                    <strong>Sample Secret Code</strong><br />
+                  </td>
+                  <td style="width: 250px; height: 45px">
+                    <input
+                      class="form-control"
+                      type="password"
+                      name="sampleSecretCode"
+                      value="abcd1234"
+                    />
+                  </td>
+                  <td
+                    style="
+                      width: 250px;
+                      height: 45px;
+                      text-align: center;
+                      padding: 0px;
+                      padding-top: 20px;
+                    "
+                  >
+                    <strong>Sample Passed</strong><br />
+                  </td>
+                  <td style="width: 250px; height: 45px">
+                    <div class="form-check" name="samplePassed">
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        id="formCheck-1"
+                        name="samplePassed"
+                      /><label class="form-check-label" for="formCheck-1"
+                        >Yes</label
+                      >
+                    </div>
+                    <div class="form-check" name="">
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        id="formCheck-2"
+                        name="samplePassed"
+                      /><label class="form-check-label" for="formCheck-2"
+                        >No</label
+                      >
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    style="
+                      width: 250px;
+                      height: 45px;
+                      text-align: center;
+                      padding: 20px;
+                    "
+                  >
+                    <strong>Sample Test Date</strong><br />
+                  </td>
+                  <td style="width: 250px; height: 45px">
+                    <input
+                      class="form-control"
+                      type="text"
+                      name="sampleTestDate"
+                      id="myDate"
+                    />
+                  </td>
+                  <td
+                    style="
+                      width: 250px;
+                      height: 45px;
+                      text-align: center;
+                      padding: 0px;
+                      padding-top: 20px;
+                    "
+                    name="sourceQuantity"
+                    value=""
+                  >
+                    <strong>Certificate Number</strong><br />
+                  </td>
+                  <td style="width: 250px; height: 45px">
+                    <input
+                      class="form-control"
+                      type="text"
+                      name="certificateNumber"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    style="
+                      width: 250px;
+                      height: 45px;
+                      text-align: center;
+                      padding: 20px;
+                    "
+                  >
+                    <strong>Certificate Date</strong><br />
+                  </td>
+                  <td style="width: 250px; height: 45px">
+                    <input
+                      class="form-control"
+                      type="text"
+                      name="certificateDate"
+                      id="myDate"
+                    />
+                  </td>
+                  <td
+                    style="
+                      width: 250px;
+                      height: 45px;
+                      text-align: center;
+                      padding: 0px;
+                      padding-top: 20px;
+                    "
+                  >
+                    <strong>Tag&nbsp;Series</strong><br />
+                  </td>
+                  <td style="width: 250px; height: 45px">
+                    <input
+                      class="form-control"
+                      type="text"
+                      name="tagSeries"
+                      value="C7577"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    style="
+                      width: 250px;
+                      height: 45px;
+                      text-align: center;
+                      padding: 20px;
+                    "
+                  >
+                    <strong>Tag Issued Range From</strong><br />
+                  </td>
+                  <td style="width: 250px; height: 45px">
+                    <input
+                      class="form-control"
+                      type="text"
+                      name="tagIssuedRangeFrom"
+                      value="C7577-4499115"
+                    />
+                  </td>
+                  <td
+                    style="
+                      width: 250px;
+                      height: 45px;
+                      text-align: center;
+                      padding: 0px;
+                      padding-top: 20px;
+                    "
+                  >
+                    <strong>Tag Issued Range To</strong><br /><br />
+                  </td>
+                  <td style="width: 250px; height: 45px">
+                    <input
+                      class="form-control"
+                      type="text"
+                      name="tagIssuedRangeTo"
+                      value="C7577-4499534"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    style="
+                      width: 250px;
+                      height: 45px;
+                      text-align: center;
+                      padding: 20px;
+                    "
+                  >
+                    <strong>No. of Tags Issued</strong><br />
+                  </td>
+                  <td style="width: 250px; height: 45px">
+                    <input
+                      class="form-control"
+                      type="number"
+                      name="noOfTagsIssued"
+                      value="420"
+                    />
+                  </td>
+                  <td
+                    style="
+                      width: 250px;
+                      height: 45px;
+                      text-align: center;
+                      padding: 20px;
+                    "
+                  >
+                    <strong>Certificate Validity in Month</strong>
+                  </td>
+                  <td style="width: 250px; height: 45px">
+                    <input
+                      class="form-control"
+                      type="number"
+                      name="certificateValidityInMonth"
+                      value="9"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    style="
+                      width: 250px;
+                      height: 45px;
+                      text-align: center;
+                      padding: 22px;
+                    "
+                    colspan="3"
+                  >
+                    <input
+                      class="form-control"
+                      type="hidden"
+                      name="scaName"
+                      value="{{ name }}"
+                    />
+                  </td>
+                  <td>
+                    <button
+                      class="btn btn-primary btn-block"
+                      type="submit"
+                      style="background: rgba(38, 159, 86, 0.94); width: 250px"
+                    >
+                      UPDATE seed block
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </form>
+      </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-</body>
-
+  </body>
 </html>
