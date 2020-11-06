@@ -1,0 +1,38 @@
+Exposing smart contracts using the REST proxy
+Any active smart contract, or chaincode, can be exposed to external applications using the REST proxy that is part of OBCS. The only thing that you need to do is to enable the chaincode that you want to expose in the REST proxy configuration. This can be done using two methods: the Quick method or the Advanced method.
+
+Exposing chaincode using the Advanced method
+I'm going to demonstrate the Advanced method using the founder organization, Acme Services. Let's log in to their environment and navigate to the Nodes page. This page lists all of the nodes that are part of the founder's network and includes the REST proxy. You can find the REST proxy listed under the entry with the name starting with gateway. In our case, we have a REST proxy with the name gateway0.acmebcs.oraclecloud.com, as shown in the following screenshot, but this may be different in a newer version of the service. It is also possible to have multiple REST proxies, but they are easily recognized by their type:
+
+
+Nodes overview listing the REST proxy as gateway0.acmebcs.oraclecloud.com
+
+To edit the configuration of the REST proxy and expose our chaincode, we can click on the options menu on the right-hand side of the entry and select the Edit Configuration. This will reveal a popup dialog box in which you can add the chaincode that you want to expose to external applications. In this dialog box, you can normally add multiple entries, however, in our case, we only have one to add for the seedBlock chaincode:
+
+
+Exposing the seedBlock chaincode through the REST proxy
+
+In the dialog box, as shown in the following screenshot, select the channel (seedBlock) on which the chaincode needs to be invoked. Next, select one of the activated chaincodes (seedBlock) on that channel. Then, select one or more peers that endorse the selected chaincode. As we want to have a reliable connection to the network, select at least two peers when available. In the case of Acme Services, select all three endorsing peers.
+
+Finally, click on Submit to reconfigure the REST proxy. The node is automatically restarted so that the chaincode is immediately available to external applications, which takes a second. Best practice here is to have multiple REST proxies so that one is always online.
+
+By using the REST proxy's Edit Configuration dialog box, you have greater control over the chaincodes exposed via REST. You can easily add or remove multiple chaincodes in one step. The dialog box also allows you to configure the default proposal and transaction wait times to limit the wait times for receiving enough endorsements and the request timeout:
+
+
+The edit configuration dialog box allows you to configure proposal and transaction wait times
+
+Exposing chaincode using the Quick method
+The second method works much more quickly if you want to expose your chaincode through the REST proxy, but you will lose some flexibility and control. Let's expose our chaincode on the other member organizations using this method. I will demonstrate the quick method using one of the participating organizations, that is, AutoLease.
+
+After logging into their environment, navigate to the Chaincodes page once again. For AutoLease, we can see that we only have version v2 installed, as shown in the following screenshot. To expose the chaincode through the REST proxy, click on the options menu for the main entry and select Enable in REST Proxy:
+
+
+Quickly enabling a chaincode in the REST proxy
+
+After selecting option, a dialog box will popup, in which you need to select the channel on which the chaincode should be invoked. Select the REST proxy through which the chaincode is enabled and choose which peers should endorse the chaincode. Click on Submit to accept your choices and expose it to external applications. The following screenshot shows this dialog and the choices made for the AutoLease organization:
+
+
+Enabling the chaincode in the REST proxy for the AutoLease organization on both peers
+
+If everything goes well, a short Set attributes successful! message is shown before the dialog box is automatically closed. If you want to be sure that the chaincode is exposed by the REST proxy, you can always check that the REST proxy configuration is the same as when we enabled it using the advanced method.
+

@@ -1,0 +1,253 @@
+Before we can deploy our smart contract, we need to put the latest version of the chaincode into a .zip file. The content of the .zip file is a directory with the same name as the Go source file, and of course the Go source file itself is placed in that directory. You can download the latest version of this file from https://git.io/fAH3Q.
+
+Follow these steps to create a valid deployment artifact:
+
+Create a directory called seedBlock on your filesystem
+Put the downloaded file (seedBlock.go) into this directory
+Create a .zip archive of the seedBlock directory
+The artifact should look like the following screenshot:
+
+
+The seedBlock.zip archive, including the seedBlock directory and Go source file
+
+After creating the .zip artifact mentioned in the preceding steps, we can start deploying and installing it on our business network. Let's start by first logging into the administration console of the founder of the network (Acme). The URL may look similar to this one: https://acmebcs-acmeinsurance.console.oraclecloud.com/.
+
+Installing chaincode on the founder's peers
+Once you are logged into the console, you are welcomed again on the Dashboard page. From the menu, navigate to the Chaincodes page. We already visited this page very briefly in Chapter 11, Setting Up Your Permissioned Blockchain. In that chapter, I explained that it can be used to deploy and install new chaincodes or new versions of an existing chaincode. The following screenshot shows the main Chaincodes page (currently none are installed).
+
+To deploy our chaincode, we can click on Deploy a New Chaincode just below the summary on the right-hand side of the page.
+
+
+Chaincodes page, used for managing the smart contracts in use by your business network
+
+After clicking on Deploy a New Chaincode, a dialog box pops up. It gives you two options for how you want to deploy your chaincode. In the dialog box, as shown in the following screenshot, you can choose between Quick Deployment and Advanced. Both options will install and start (instantiate) the chaincode, and enable the chaincode in the REST proxy.
+
+The Quick Deployment option offers one-step deployment with default options, while the Advanced option offers step-by-step deployment for full flexibility.
+
+
+Choose how you want to deploy your chaincode using the Quick or Advanced options
+
+Let's take a look at the Advanced option and carry out a step-by-step deployment of our chaincode. Click on Advanced to go to the first step of the wizard. In this first of three steps, we need to upload the .zip archive with the chaincode file and specify its name, version, and the target peers on which we want to install it. Use the following details:
+
+Field
+
+Value
+
+Description
+
+Chaincode name
+
+Enter: seedBlock
+
+The name needs to be between 1 and 64 characters long. It may include alphanumerics, "_", and "-".
+
+Version
+
+Enter: v1 (default)
+
+The name needs to be between 1 and 64 characters long. It may include alphanumerics, ".", "_", and "-".
+
+Target peers
+
+Select: peer0,peer1 and peer2.acmebcs.oraclecloud.com
+
+Choose the member peers on which you want to install the chaincode.
+
+Chaincode source
+
+Pick: seedBlock.zip
+
+Specify the location of the .zip file.
+
+Data to be entered in the first step of the deployment wizard
+
+After entering the data, a dialog box will appear, as shown in the following screenshot:
+
+
+Step 1 of 3: Install a new chaincode on peers
+
+If your chaincode is valid, it will show a SUCCESS! message, as shown in the following screenshot. When choosing the Advanced option, you can skip step, two and three of the wizard. We could complete the other two steps, but to give you a better understanding of what is happening when executing each step, we will perform steps two and three manually. Notice that our new chaincode is listed in the background, and it also indicates that it is available to start on any of our channels.
+
+
+Step 2 of 3: Instantiate (start) the chaincode on a channel. This step can be skipped.
+
+Close the wizard to skip steps two and three and return to the Chaincodes page. From that page, we can view the details of a chaincode or a specific version of a chaincode. To view all installed versions of a chaincode, click on the arrow in front of the name to expand the entry. Click either on the name of the chaincode or on the specific version to see its details. From the Chaincodes page, you can also directly instantiate the chaincode on one of your channels by selecting Instantiate from the options menu on the right-hand side of each entry.
+
+
+List of installed chaincodes, including ours (seedBlock), and the option to instantiate the chaincode
+
+In our case, we are navigating to the details of the version that we just deployed. Let's click on the specific version v1 link. This navigates us to a new subpage listing the peers on which this version is currently installed. You can't install on other/new peers from this page, as you need to follow the same steps as before, but you can navigate to the Instantiated on Channels section to instantiate a chaincode on one of your channels.
+
+The following screenshot shows that our chaincode is installed on all three of the peers managed by Acme Services. From the menu on the left, you can view the channels on which the chaincode is instantiated (activated).
+
+
+Chaincode details of the installed peers
+
+ 
+
+Activating the chaincode on a channel
+We also need to install the chaincode on the OBCS instances of the other members, since for members to endorse transactions produced by the chaincode invocation of other members, they need to execute the transaction redundantly on their own nodes. But before we do that, let's activate the chaincode on the channel and give permission to other members to configure the REST proxy and execute the transactions exposed by the chaincode.
+
+Let's pick up where we left off a moment ago. Click on the Instantiated on Channels menu item on the left to navigate to that section. The page now shows a list of channels on which the chaincode is active. Of course, this list is currently empty, as we haven't yet activated our chaincode. Let's do so by clicking on Instantiate on a New Channel:
+
+
+Channel details of the instantiated channels
+
+This will again reveal a dialog popup similar to the second step of the deployment wizard. This form contains some more options than the deployment step, which will cause a different result in the way that transactions are endorsed when used. Use the following information to activate our chaincode to the seedBlock channel we created earlier:
+
+Field
+
+Value
+
+Description
+
+Channel
+
+Select: seedBlock
+
+Select a channel on which to activate the chaincode.
+
+Peers
+
+Select: peer0,peer1, andpeer2.acmebcs.oraclecloud.com
+
+Choose the peers that you want to be able to use the chaincode. The chaincode needs to be installed on these peers.        
+
+Initial Parameters
+
+Leave empty
+
+Optional parameters when instantiating the chaincode. We are not using this functionality.
+
+Endorsement Policy
+
+Add an identity for all participating organizations of the network with the role "Member".
+
+The peers that need to endorse a transaction.
+
+Expression Mode
+
+Select: Basic
+
+Choose between Basic and Advanced expression mode (that is, it uses Fabric's endorsement policy expression syntax (https://hyperledger-fabric.readthedocs.io/en/latest/endorsement-policies.html#endorsement-policy-syntax), for example,{"2-of":[{"signed-by": 1},{"signed-by":2}]}]}.
+
+Signed By
+
+Enter: 3
+
+Number of organizations needed to endorse submitted transactions.
+
+Transient Map
+
+Leave empty
+
+Provide static information to the chaincode.
+
+Data to enter when activating (instantiating) a chaincode on the seedBlock channel
+
+The most important part of this form is the Endorsement Policy. If you leave this empty, only one member needs to endorse the transaction before it is offered to the other peers via the ordering service. In our case, we are adding all five organizations to the identity list. Out of the five organizations, the majority, need to endorse the transaction. The following screenshot shows the endorsement policy configuration as described in the table:
+
+
+Endorsement policy configuration when activating the seedBlock chaincode
+
+After filling in the information required by the form, click on Instantiate in the bottom-right corner to activate the chaincode on the seedBlock channel. This might take a few minutes depending on the number of organizations that need to be notified and the number of peers assigned as endorsers. When the activation process is finished, a quick success message is visible before the dialog box is automatically closed. After refreshing the page, the Instantiated Channels Summary will appear showing that the chaincode is activated on the channel, as shown in the following screenshot:
+
+
+Activated chaincode is listed in the summary and channel table
+
+The reason why the activation process can take a few minutes is because it spins up a Docker Container for each endorsing peer node of that specific organization, containing the executable binary of our chaincode application.
+
+If you can Secure Shell (SSH) in to the Virtual Machine (VM) provisioned on Oracle Cloud, you can use the following command to get the list of images:
+
+Copy
+docker ps --filter "name=seedBlock-v1" --format "{{.Image}}"
+This command will list all Docker Images that contain seedBlock-v1 in their name, which in my case resulted in the following list for Acme Services:
+
+Copy
+acmebcs.oraclecloud.com-peer0.acmebcs.oraclecloud.com-seedBlock-v1-101d060f9770dbc1ae5605120c08d7c6f62b8d011cd423bc57d7f1926ed5e800
+
+acmebcs.oraclecloud.com-peer2.acmebcs.oraclecloud.com-seedBlock-v1-6955c2b3111d115eef4276309e2248aeb6b57cb17c29213430355c1d8c7f330c
+
+acmebcs.oraclecloud.com-peer1.acmebcs.oraclecloud.com-seedBlock-v1-979c71fc7212e8f6daf955596063decd17272dd459a998c11b080ac7c40fba55
+From the chaincode channel page, we can view the transaction that was added to the ledger as a result of our action by clicking on the name of the channel. This will navigate us to the channel details, including the summary of transactions added to the ledger. This summary, as shown in the following screenshot, lists the activation of the chaincode as a data (sys) transaction, as it does not include user transactions:
+
+
+Ledger summary of the seedBlock channel, filtered by last day, listing the activation transaction of the chaincode
+
+To see the data that was sent in a transaction, you click on the block that contains the transaction and, as a result, the list of transactions at the bottom of the page is refreshed. This block only contains one transaction. The following screenshot shows the list of transactions in the selected block, 6:
+
+
+The transaction responsible for the activation of the chaincode on the channel
+
+For each transaction, the transaction (Tx) ID, time, called chaincode, and Tx status is listed.
+
+To see the details of the transaction and the data sent in the transaction, you can expand the entry by clicking on the arrow to the left of the entry. This will show, for example, the function that was invoked on the chaincode, the arguments used to invoke the function, whether the validation result was valid, and who the initiator and the endorsers of the transaction were.
+
+ 
+
+The following screenshot shows the details of the deploy function invoked by the transaction. This function is part of the iscc system chaincode.
+
+
+Transaction details showing the deployment of the chaincode to the seedBlock channel
+
+Installing a new version of our chaincode
+Before installing the chaincode on the other member nodes, let's talk about upgrading an existing chaincode deployed on a channel. As you probably noticed when deploying the chaincode, you need to give it a version—even if it's the default version.
+
+ 
+
+This means that you can upgrade your existing chaincode to a new version. I will now address this possibility, as this version number is going to be used in the rest of the chapter, for example, in the REST API calls.
+
+Navigate back to the Chaincodes page. Now that the chaincode is activated on our channel, it is possible to upgrade the chaincode using the options menu on the right-hand side of the chaincode entry. From the menu, select the Upgrade option:
+
+
+Option to upgrade an active chaincode
+
+This will launch a popup dialog box, as partially shown in the following screenshot. From this dialog box, you can select or install a new version of the chaincode. In our case, we are going to install a new version, so select that option for the version source. This time, enter version v2, and select all three of the peers of Acme Services. Upload the same chaincode artifact as before, that is, seedBlock.zip, and click on Next to install the new version:
+
+
+Dialog box for upgrading an existing chaincode
+
+In the second step of the upgrade wizard, we need to select the peers on which we want to activate this version and specify a new endorsement policy for this version. So you can have different versions installed on different peers. You can also downgrade to an older version when running into bugs.
+
+Reuse the same information as before to activate the chaincode on the seedBlock channel. Confirm the channel, select all three founder peers, and add all five identities as members in the endorsement policy (remember, a minimum of three organizations need to sign the transaction). Click on Next to upgrade the chaincode on the channel.
+
+Again, this might take a few minutes, so just be patient. If the upgrade successful, the dialog box will show a chaincode upgraded successfully message and a large green check mark. You can close this dialog box manually.
+
+The following screenshot shows the two installed versions of the seedBlock chaincode application. Notice that the new version is added to the list of chaincode versions of the seedBlock entry, and that version v1 is no longer active (instantiated) on a channel.
+
+There can be only one version of a chaincode active at a time:
+
+
+There are two versions of the chaincode installed, but only version v2 is active on the channel
+
+If you navigate to the channel and look at the ledger summary, another block is appended to the ledger. It again includes one transaction, but instead of the deploy function of the iscc chaincode being invoked by the transaction, the upgrade function is invoked. The following screenshot shows the details of the transactions after successfully executing the upgrade of the chaincode:
+
+
+Transaction details showing the upgrade of the chaincode on the insurance channel
+
+You can always navigate to the Instantiated Chaincodes section of the channel detail page to confirm that a specific version is active on the channel.
+
+This section of the page shows the installed chaincodes and the active version of each chaincode, as shown in the following screenshot:
+
+
+As expected, version v2 of the insurance chaincode is active on the channel
+
+Installing chaincode on member organizations
+Now that the chaincode is installed on the founder and activated on the seedBlock channel, we can deploy the chaincode on the environment of each of the member organizations. The following steps need to be performed for each environment, but I will demonstrate them on the environment of emergency services.
+
+ 
+
+After logging into their environment, you are welcomed by the Dashboard page. From there, navigate to the Chaincodes page and follow the same process as with the founder, but this time, you only have to complete the first step. 
+
+Deploy a new chaincode using the advanced method, and enter the following values:
+
+Chaincode name: seedBlock
+Version: v2
+Target peers: select all available peers
+Chaincode source: upload seedBlock.zip artefact
+Click Next to install the chaincode on the peers and close the dialog box. You won't be able to instantiate it on a channel (for example, seedBlock) on which the chaincode is already activated. As the founder already activated the chaincode on the channel, it is automatically instantiated in the member organization's environment, as shown in the following screenshot.
+
+If we had installed the chaincode under version v1, this would not have happened automatically:
+
+
+Previous instantiated chaincode is automatically activated on the member's channel after deployment
