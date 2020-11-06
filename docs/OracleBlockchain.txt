@@ -1,0 +1,315 @@
+Export member organization's certificates
+
+
+To be able to add a member organization to an existing blockchain network, we need to export the client certification for each of the member organizations. Let's start with the emergency and rescue services by logging into their administration console. In our case, the URL to use is similar to: https://ersbcs-emergencyservices.blockchain.ocp.oraclecloud.com.
+
+We are again welcomed by the Dashboard page. However, instead of showing the health of the organization's network and channel and ledger activity, we are faced with the steps required to join an existing OBCS network.
+
+The following screenshot shows the dashboard displayed when we login to the member organization's console for the first time. The dashboard states that we need to export the organization's certificates and import the corresponding orderer settings. Also notice that the Dashboard page shows fewer summary details, as a member organization does not include an orderer node:
+
+
+Dashboard of the administrative console of a member organization at first login
+
+To export the organization's certificates, we need to navigate to the Network page. The Network page of Emergency Services lists only one participating organization—itself—but it has a different role than Acme Services, namely Participant, whereas Acme has the role of Founder. Using the options menu on the right side of the listed organization, as shown in the following screenshot, we can export its certificates:
+
+
+Exporting the certificates of a member organization
+
+Performing this action will download a JSON file called {membername}_certificates.json. Thus, in our case, it downloads the EmergencyServices_certificates.json file. You can open this human-readable file with any text editor, and it will contain the MSP ID of the organization and three certificates, namely its admincert, cacert, and tlscacert. The following snippet shows the contents of the downloaded JSON file:
+
+Copy
+{
+  "mspid": "EmergencyServices",
+  "certs": {
+    "admincerts": "-----BEGIN CERTIFICATE-----\nMIICLDCCAdKgAwIBAgIRALLXmKiY4NSl5JEmtm+fMcwwCgYIKoZIzj0EAwIwfzEL\nMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNhbiBG\ncmFuY2lzY28xHzAdBgNVBAoTFmVyc2Jjcy5vcmFjbGVjbG91ZC5jb20xIjAgBgNV\nBAMTGWNhLmVyc2Jjcy5vcmFjbGVjbG91ZC5jb20wHhcNMTgwNjI3MTUxOTU1WhcN\nMjgwNjI0MTUxOTU1WjBhMQswCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5p\nYTEWMBQGA1UEBxMNU2FuIEZyYW5jaXNjbzElMCMGA1UEAwwcQWRtaW5AZXJzYmNz\nLm9yYWNsZWNsb3VkLmNvbTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABDXX7Wst\nJK68+C47eaz4KvMdCryK4GiMLssJ3YAq2XYQXFEreQKJCi48Dw2WXyoh9+C8yUTE\n+PMfQk6binKWOdejTTBLMA4GA1UdDwEB/wQEAwIHgDAMBgNVHRMBAf8EAjAAMCsG\nA1UdIwQkMCKAIJZYq7ZAtSjtcHtPF3X46etkrrNN0QifIe2z721pLUqqMAoGCCqG\nSM49BAMCA0gAMEUCIQDNXkuDBYeaXpWjKzDWmRy3piw6KPm7itLIRBhUM4Bn4AIg\nZ13WGIDt4imJLBGE4dy5yzekYelDSK0sXeXLsfk5EDw=\n-----END CERTIFICATE-----\n",
+    "cacerts": "-----BEGIN CERTIFICATE-----\nMIICWjCCAgGgAwIBAgIQczEGojCQozthy70JMcXZXTAKBggqhkjOPQQDAjB/MQsw\nCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZy\nYW5jaXNjbzEfMB0GA1UEChMWZXJzYmNzLm9yYWNsZWNsb3VkLmNvbTEiMCAGA1UE\nAxMZY2EuZXJzYmNzLm9yYWNsZWNsb3VkLmNvbTAeFw0xODA2MjcxNTE5NTVaFw0y\nODA2MjQxNTE5NTVaMH8xCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlh\nMRYwFAYDVQQHEw1TYW4gRnJhbmNpc2NvMR8wHQYDVQQKExZlcnNiY3Mub3JhY2xl\nY2xvdWQuY29tMSIwIAYDVQQDExljYS5lcnNiY3Mub3JhY2xlY2xvdWQuY29tMFkw\nEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE6tYi29rf7wL3GA4mtDpnVCMDxk0YhgzN\nuXYj/eY84xJgXKmuBlFNVWk58leTb86VbpMuymCczqx0tuszxRguYKNfMF0wDgYD\nVR0PAQH/BAQDAgGmMA8GA1UdJQQIMAYGBFUdJQAwDwYDVR0TAQH/BAUwAwEB/zAp\nBgNVHQ4EIgQgllirtkC1KO1we08Xdfjp62Sus03RCJ8h7bPvbWktSqowCgYIKoZI\nzj0EAwIDRwAwRAIgTbjM/dD0hw3ACMM9Xz8eCeWxehFu314WWmnyLNddVvwCIGKh\nEN5+0lKc3AZMiNiWmMN9jivVi7oX5DcmQJx+VEK4\n-----END CERTIFICATE-----\n",
+    "tlscacerts": "-----BEGIN CERTIFICATE-----\nMIICYjCCAgmgAwIBAgIQEL7VIPGDRKuxF1FetjEVizAKBggqhkjOPQQDAjCBgjEL\nMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNhbiBG\ncmFuY2lzY28xHzAdBgNVBAoTFmVyc2Jjcy5vcmFjbGVjbG91ZC5jb20xJTAjBgNV\nBAMTHHRsc2NhLmVyc2Jjcy5vcmFjbGVjbG91ZC5jb20wHhcNMTgwNjI3MTUxOTU1\nWhcNMjgwNjI0MTUxOTU1WjCBgjELMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlm\nb3JuaWExFjAUBgNVBAcTDVNhbiBGcmFuY2lzY28xHzAdBgNVBAoTFmVyc2Jjcy5v\ncmFjbGVjbG91ZC5jb20xJTAjBgNVBAMTHHRsc2NhLmVyc2Jjcy5vcmFjbGVjbG91\nZC5jb20wWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAAQwK1f2oKa+hUGi6dmGPlUm\nRQIjqCLWcTMrfVdoagTFzUhd7UhcR2KOLAFz30PZj7z9++wn5o21iKMfrQqv6SP4\no18wXTAOBgNVHQ8BAf8EBAMCAaYwDwYDVR0lBAgwBgYEVR0lADAPBgNVHRMBAf8E\nBTADAQH/MCkGA1UdDgQiBCDkSepbu9VSHGstY2ZBcNUAS/tYKiFoz/xahLdgmDIB\nAjAKBggqhkjOPQQDAgNHADBEAiAiMZReX2iuBP847icOu9yYU3oI1dLGUtKalw2W\nuWe2JwIgZbldsX/Yat9WzDC+8RFrLscdckkELO+TZdUM4T5aVv8=\n-----END CERTIFICATE-----\n"
+  }
+}
+To be able to set up our business network completely, we also need to perform these steps for the other member organizations that use OBCS (that is, AutoLease, Allsecur Insurance, and AXA Insurance).
+
+Once we have done this for each organization, we should have a total of four JSON files.
+
+
+List of all member organizations' certificate files
+
+Export member organization's peer nodes
+The next step is to export the peer nodes of the participating member organizations. This is not necessary for the organizations to communicate with each other, but it enables us to get a complete picture of all of the peers identified in the business network. Let's explore this step using the environment of AutoLease by logging into their console. In our case, the URL to use is similar to: https://alebcs-emergencyservices.blockchain.ocp.oraclecloud.com.
+
+The peer nodes configuration can be exported by navigating to the Nodes page. The AutoLease organization consists of five nodes, including two peer nodes, one CA, one REST proxy, and an administrative console. In order to have a stable network, we need many peer nodes to be part of it. To achieve this, we export the configuration of both peers. This can be done by clicking on the Export/Import Peers button and selecting Export.
+
+
+Export/import the configuration of peer nodes
+
+ 
+
+ 
+
+After selecting the Export option, a dialog box will pop-up, as shown in the following screenshot. In the dialog box, we can select the peers that we want to export. The Peer List field allows us to select the peers that we want to export:
+
+
+Pop-up dialog box for selecting the peers that we want to export
+
+In our case, we select both peers (peer0 and peer1). Click on theExportbutton to download the configuration file with the exported peer nodes. The downloaded configuration file also uses the JSON format and it is called {membername}-exportNodesToRemote.json. Thus, in our case, it downloads theAutoLease-exportNodesToRemote.jsonfile. If we open the file in a text editor, we see that it contains the technical details of each exported peer and the public TLS certificate of the CA. The following snippet shows the content of the downloaded JSON file:
+
+Copy
+{ "peers": [
+    {
+      "nodeName": "peer0.alebcs.oraclecloud.com",
+      "address": "grpcs://peer0.alebcs.oraclecloud.com:7051",
+      "eventAddress": "grpcs://peer0.alebcs.oraclecloud.com:7053",
+      "type": "Peer",
+      "typeDisp": "Peer",
+      "mspId": "AutoLease",
+      "joinedChannels": [],
+      "installedChaincodes": [],
+      "externalPort": "10015",
+      "externalAddr": "192.168.20.3"
+    }, {
+      "nodeName": "peer1.alebcs.oraclecloud.com",
+      "address": "grpcs://peer1.alebcs.oraclecloud.com:7051",
+      "eventAddress": "grpcs://peer1.alebcs.oraclecloud.com:7053",
+      "type": "Peer",
+      "typeDisp": "Peer",
+      "mspId": "AutoLease",
+      "joinedChannels": [],
+      "installedChaincodes": [],
+      "externalPort": "10018",
+      "externalAddr": "192.168.20.3"
+    }
+  ],
+  "tls_ca_certs": "-----BEGIN CERTIFICATE-----\nMIICZDCCAgqgAwIBAgIRAJcNk5MOb0L8iBkeRk1Uu7QwCgYIKoZIzj0EAwIwgYIx\nCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQHEw1TYW4g\nRnJhbmNpc2NvMR8wHQYDVQQKExZhbGViY3Mub3JhY2xlY2xvdWQuY29tMSUwIwYD\nVQQDExx0bHNjYS5hbGViY3Mub3JhY2xlY2xvdWQuY29tMB4XDTE4MDYyNzE1MjA0\nMFoXDTI4MDYyNDE1MjA0MFowgYIxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxp\nZm9ybmlhMRYwFAYDVQQHEw1TYW4gRnJhbmNpc2NvMR8wHQYDVQQKExZhbGViY3Mu\nb3JhY2xlY2xvdWQuY29tMSUwIwYDVQQDExx0bHNjYS5hbGViY3Mub3JhY2xlY2xv\ndWQuY29tMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEQOywAV57Hr74JHUSZkDm\nEiF/NMKU3Y+GKjkyDBO93I99CWVs/h6l+hP9WbXls/UMeUaZ1n5rGhQO0Cp7+0MF\n/qNfMF0wDgYDVR0PAQH/BAQDAgGmMA8GA1UdJQQIMAYGBFUdJQAwDwYDVR0TAQH/\nBAUwAwEB/zApBgNVHQ4EIgQgLPDNrpl/WjfO5j4hOQ1iko04mV8/RmA9Qh/vlLzH\nvrkwCgYIKoZIzj0EAwIDSAAwRQIhAO9fGpSQ/lyeWX/IqkL27G2bGOOzXld25snQ\nOXmbksoSAiB9N8+fQrdz4zaDkjxjQIK0qfiE552cPVJeyWyCU3S6hg==\n-----END CERTIFICATE-----\n"
+}
+To be able to identify all of the peers in our business network, we need to perform these steps for the other member organizations that use OBCS. Not all organizations have the same number of peer nodes, for example, Allsecur and AXA Insurance only have one peer, but for each organization we will export all provisioned peers. Once we do this for each organization, we should have a total of four JSON files:
+
+
+List of exported member organizations' peer configuration files
+
+Import certificates of member organizations
+In the last two tasks, we exported both the certificates and the peer node configurations of each of our member organizations. The next task in adding our member organizations to our existing business network is to import the downloaded files in the OBCS instance of the founder, that is, Acme Services.
+
+To do this, we need to log back into the administrative console of Acme and navigate to the Network page. Then, we can add the member organizations by clicking on the Add Organizations button, as shown here:
+
+
+Add member organizations to your existing business network
+
+A dialog box will pop-up in which we can find and upload the certificates for the members that we want to add to the network. We can upload multiple certificates at the same time. In our case, we can upload the certificate files we exported/downloaded from our member organizations in one step. In the dialog box shown in the following screenshot, you can click on the Upload Organization Certificates link and select the file that you want to upload. Click on the plus (+) icon to add each of the certificates files:
+
+
+Upload each of the member organization's certificates file, and press the plus (+) icon to add multiple organizations.
+
+Notice that when you upload a certificates file, the MSP ID of the organization is immediately recognized in the user interface. This means that you uploaded a valid certificates file. Once all organization certificates are uploaded, we can persist them by clicking on the Add button at the bottom-right corner of the dialog box. In the background, the organizations are added to the list. To close the dialog box, click on Finish. Alternatively, you can directly export the orderer settings from the dialog, but we will do that in one of the upcoming steps. Our list now counts five organizations (one founder and four participating members):
+
+
+Network page of the founder showing the four new participating member organizations
+
+We will add the last organization, USA Automotive Services, in Chapter 14, Configuring, Extending, and Monitoring Your Network, when we extend our network by connecting an existing Hyperledger Fabric network to the network hosted by the founder running OBCS.
+
+Once we have added our member organizations, we immediately have a better understanding of our network as we have now enabled most of the capabilities of OBCS. If we look at the topology view of our network, we see an updated diagram that shows our network's structure and the relationships between organizations:
+
+
+Topology view of our network after adding member organizations that use OBCS
+
+Import peer nodes of member organizations
+Notice in the previous diagram that we can see the individual organizations, but we still don't have the full picture as no peer nodes have been identified for these member organizations. Wouldn't it be nice to have that picture? The following step is not essential to run your network and to allow organizations to transact with each other, but it can be useful in understanding how decentralized your network is in reality.
+
+When logged into the administrative console of the founder, Acme, navigate to the Nodes page. From this page, we can import the configuration of the exported remote peers from all member organizations. Click on the Export/Import Peers button, and select the Import option.
+
+
+Import remote peers for other member organizations
+
+A dialog box appears that allows us to import remote nodes from other organizations. Using the dialog box, we can find and upload the JSON files containing the nodes' information (*-exportNodesToRemote.json). In our case, we can upload the files created when we exported the peers' configuration from the other member organizations. Within the dialog, you can click on the Upload remote nodes configuration link and select the file you want to upload, as shown in the following screenshot. Click on the plus (+) icon to add each of the configuration files or import them separately:
+
+
+Import each of the remote peers' configuration file of the member organizations
+
+Finally, click on Import at the bottom-right corner of the dialog box to persist the information and add the remote peers to the list of identified peers. If the configuration files are correct, the dialog box will briefly show a green confirmation message before it automatically closes. The remote peers are now visible in the list of identified nodes, and they are added to the total number of nodes in the Nodes Summary section.
+
+The following image shows that, from the perspective of the founder, we have a total of 13 identified nodes, including the 6 imported remote peers. The list only shows the remote peers when a filter on this type is active. The status is N/A because it is not managed by this instance, and there is currently no remote health-check functionality:
+
+
+Nodes page showing the identified nodes from the founder's perspective
+
+Notice in the preceding screenshot that for each remote peer, the MSP ID to which it belongs is automatically recognized by OBCS. The result of importing remote peers is visible in the topology view of the network.
+
+Navigate to the Nodes page and click on the flowchart icon to see the result, as shown in the following diagram:
+
+
+Topology of our network after importing the peer configuration of each member organization
+
+ 
+
+Export orderer settings from founder
+In order for participating organizations to connect to the existing network of the founder, they need to know the configuration settings of the ordering service. These settings can be exported via the founding organization.
+
+As the founder (Acme), navigate to the Network page. From this page, we can export the ordering service configuration by clicking on the options menu on the right-hand side of the AcmeServices entry in the list of organizations and selecting Export Orderer Settings:
+
+
+Exporting the Ordering Service settings managed by the founder organization, Acme Services
+
+Performing this action will download a JSON file called {foundername}_orderer_settings.json. In our case, it downloads the file AcmeServices_orderer_settings.json. If you open this file with a text editor, you will see that it contains the MSP ID of the founder organization, the TLS certificate of the corresponding CA, and information on how to connect to the ordering service (IP address, port, and so on). The following snippet shows the contents of the downloaded JSON file:
+
+Copy
+{
+  "mspid": "AcmeServices",
+  "tlscacerts": "-----BEGIN CERTIFICATE-----\nMIICZjCCAg2gAwIBAgIQYaE18EUOf7aftpx94MmnVTAKBggqhkjOPQQDAjCBhDEL\nMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNhbiBG\ncmFuY2lzY28xIDAeBgNVBAoTF2FjbWViY3Mub3JhY2xlY2xvdWQuY29tMSYwJAYD\nVQQDEx10bHNjYS5hY21lYmNzLm9yYWNsZWNsb3VkLmNvbTAeFw0xODA2MjcxNTE5\nMTNaFw0yODA2MjQxNTE5MTNaMIGEMQswCQYDVQQGEwJVUzETMBEGA1UECBMKQ2Fs\naWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZyYW5jaXNjbzEgMB4GA1UEChMXYWNtZWJj.........\n-----END CERTIFICATE-----\n",
+  "ordererSeviceInfo": [
+    {
+      "address": "192.168.99.101",
+      "port": 7000,
+      "native": true,
+      "restport": 8080
+    }
+  ]
+}
+ 
+
+ 
+
+Import orderer settings at member organizations
+The final step that we need to perform to connect our member organizations to the existing network is to import the settings of the Ordering Service. This step needs to be done for each of the member organizations. Let's illustrate this step with the Allsecur Insurance organization by logging into their administrative console. In our case, the URL to use is similar to: https://ascbcs-allsecurinsurance.blockchain.ocp.oraclecloud.com.
+
+In order to import the settings, simply navigate to the Network page and click on the Import Orderer Settings button on the right-hand side of the filter options:
+
+
+Import the ordering settings of the founder organization
+
+A dialog box will appear that asks you to provide an Orderer settings JSON file that contains the MSP ID, orderer address, and TLS CA certificate of an OBCS organization. Click the Upload Orderer Settings link to upload the exported settings file from the founder organization. Select the AcmeServices_orderer_settings.json file, and see the new Orderer Address,which is part of the settings file, appear in the dialog box.
+
+
+Upload orderer settings of the founder organization
+
+To check whether the OBCS instance of the member organization is connected to the network of the founder, you can navigate to the Dashboard page. You should see the summary displaying the number of peers, channels, and chaincodes managed by the organization, as well as information about the organization's health, channel, and peer activity.
+
+The following screenshot shows the Dashboard page of Allsecur Insurance after configuring the ordering service settings. It looks a bit simpler than the dashboard of the founder, Acme, since a member organization does not have an orderer and other participating organizations:
+
+
+
+Setting up a private channel
+Now that we have joined the member organizations to the existing business network, we can set up a new communication channel between those organizations. A channel is generally created by the founder organization, which permits member organizations to join the channel. To achieve this, we need to execute the following tasks:
+
+Create a new channel as the founder
+Join each of the member organization's peers to the channel
+Create a new channel as the founder
+In order for the organizations of our network to transact with each other, we first need to create a new channel (or edit the default channel) and configure which organizations can join the channel. In our case, we are going to create a new channel. We will create the channel as the founder organization and will name it seedBlock.
+
+While logged into the administrative console of the founder, Acme, navigate to the Channels page. This page already lists one channel, called acmeservicesorderer, which is the default channel created when provisioning the founder instance of OBCS. We will ignore this channel and create our own. To do so, click on the Create a New Channel button, as shown in the following screenshot:
+
+
+Creating a new channel in which member organizations can transact with each other
+
+A dialog box is shown, in which we need to specify the name of the new channel and which organizations' peers can join the channel.
+
+Use the following information when creating the new channel:
+
+Field Name
+
+Field Value
+
+Description
+
+Channel Name
+
+Enter seedBlock
+
+Only lowercase ASCII alphanumerics. The name must start with a letter, and it can't be longer than 15 characters.
+
+MSP ID
+
+Select all organizations 
+
+Select the organizations that you want to allow to join the channel. You can also create more private channels that include a subset.
+
+ACL
+
+Select ReaderOnly for AcmeServices;
+
+Select ReaderWriter for other organizations
+
+Choose ReaderOnly if you want the organization only to allow reading of channel information and blocks on the channel and to invoke chaincode.
+
+Peers to Join Channel
+
+Select all available peers (0, 1, and 2) from Acme Services
+
+Selects zero, one, or more peers to join the channel. Selecting zero peers still results in channel creation.
+
+Information required to create a new channel
+
+The following screenshot shows the Create a New Channel dialog box with the information specified in the preceding table:
+
+
+Dialog box for creating a new channel among member organizations
+
+Click the Submit button, in the bottom-right corner, to create the new channel. When you specify peers to join the channel, they will also be joined in the process. The dialog box closes automatically, and the channel is shown in the list of available channels.
+
+If you need to add organizations to the channel later, update the ordering service settings or add peers to the channel. To do this, you can use the options menu on the right-hand side of each entry:
+
+
+After the channel is created, these options allow you to add organizations to the channel, for example
+
+At any time, you can check which organizations are allowed to join the network by viewing the channel's details. Click on the name of the channel (for instance, seedBlock) to view its details and navigate to the Organizations section to view the list of participating organizations and the ACL (Access Control List) policy set for each organization.
+
+
+Channel details, including organizations that are allowed to join and set ACL policies
+
+Adding member peers to the channel
+Now that the member organizations have joined the business network and the channel has been created, we can finally join the peers of the participating organizations. This step needs to be performed for each organization. Let's illustrate this step with the AXA Insurance organization by logging into their administrative console. In our case, the URL to use is similar to: https://axabcs-allsecurinsurance.blockchain.ocp.oraclecloud.com.
+
+While logged into the administrative console of AXA insurance, navigate to the Nodes page. From this page, we can add specific peers to the channel. AXA and Allsecur only have one peer, but AutoLease and Emergency Services have two peers each. The following steps need to be performed for each of the peers that you want to add to an existing channel. To add a peer to a channel, click on the name of the peer. In our case, we will join peer0.axabcs.oraclecloud.com to the seedBlock channel:
+
+
+Select the peer that you want to join to an existing channel
+
+On the details page of the peer, navigate to the Channels tab. This tab, as shown in the following screenshot, displays a list of channels that the peer node uses to communicate with other nodes. You can use this tab to add the peer node to channels. To add a peer, click on Join New Channels:
+
+
+Use the Channels tab to join the peer node to channels
+
+This action will display the following dialog box, asking you to specify the channel name that you want the peer to join. Enter the exact name of the channel, for example, seedBlock (names are case-sensitive), and click Join:
+
+
+Enter the exact name of the channel you want the peer to join
+
+If the peer of the organization is allowed to join the channel, you will briefly see a message such as the one shown in the following screenshot, stating Channel joined successfully! If the channel does not exist, or if the organization is not allowed to join it, an error message similar to the following is shown:
+
+
+Possible success and error messages displayed when joining a channel
+
+Joining a valid channel is nearly instantaneous, and it results in the automatic closure of the dialog box, returning you to the channel list of the peer node. The list now shows the channel that we just joined, as shown in the following screenshot:
+
+
+Peer0 of AXA Insurance successfully joined the seedBlock channel
+
+ 
+
+We need to perform the following steps for all participating organizations' peers. In our case, we still have to join the following peers:
+
+peer0.ascbcs.oraclecloud.com of Allsecur Insurance
+peer0 and peer1.ersbcs.oraclecloud.com of Emergency Services
+peer0.alebcs.oraclecloud.com and peer1.alebcs.oraclecloud.com of AutoLease
+Note
+You can easily join peers to a channel via the Nodes page using the menu options on the right side of the peer node entry:
+
+
+To see the details of the channel, you can click on its name in the list of channels that a peer has joined, or you can navigate to the Channels page and find a list of all of the channels over which the organization communicates. The list on this page, as shown in the following screenshot, reports slightly more information about the joined channels, such as the number of peers that have already joined, the number of instantiated chaincodes (smart contracts), and who initially created the channel. Click on the name to view the channel's details:
+
+
+List of channels that the AutoLease organization has joined with one or more peer nodes
+
+You can, for example, view the peers that have joined the channel. The following screenshot shows that both peer nodes of AutoLease have successfully joined the seedBlock channel. Notice that the option to set one or more anchor peers on the channel is checked.
+
+As explained in Chapter 10, Introducing the Oracle Blockchain Cloud Service, for better discovery of the network, organizations using the channel are advised to designate at least one anchor peer (or multiple anchor peers to prevent a single point of failure). This allows for peers belonging to different members to discover other peers on the channel.
+
+
+List of peers that joined the channel for the AutoLease organization. Both peers are set as anchor peers.
+
+For each organization in our network, including the founder, we need to set at least one anchor peer. For organizations that joined two or more peers to the channel(such as AutoLease, Emergency Services, and Acme Services), you set a minimum of two anchor peers.
+
+After performing this last task, our business network is set up and able to run a smart contract (chaincode) between our organizations.
+
+When we look at the ledger details of our newly-created channel, as shown in the following screenshot, we see that eachSet Anchor Peers action created a new block on the chain of type config, meaning that no asset data was persisted.  
+
+
+List of config transactions (blocks) persisted to the ledger of our seedBlock channel
+
