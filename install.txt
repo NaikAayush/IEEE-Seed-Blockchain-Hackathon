@@ -1,0 +1,19 @@
+Oracle blockchain
+
+click on hamburger menu >> select blockchain Platform
+
+Select "Seed_Certification01" Compartment
+
+Here are the following Instances deployed on the network
+
+Oracle VM
+
+http://152.67.0.239:5000
+VM Name: IEEE-Flask 
+the oracle VM in which the website is hosted
+
+use the ssh key to login to the instance 
+
+ssh -i ssh-key.key ubuntu@152.67.0.239
+
+the MySQL sever is also instaniated in the same VM
