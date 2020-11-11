@@ -1,4 +1,6 @@
-USE seeds
+CREATE DATABASE seeds;
+
+USE seeds;
 
 CREATE TABLE seed (
     uuid VARCHAR(50),
@@ -7,4 +9,4 @@ CREATE TABLE seed (
     tagSeries VARCHAR(50),
     tagStart INT,
     tagEnd INT
-)
+);

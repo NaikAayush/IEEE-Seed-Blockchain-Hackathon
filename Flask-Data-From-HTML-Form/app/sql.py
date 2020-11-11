@@ -4,7 +4,7 @@ import uuid
 mydb = mysql.connector.connect(
   host="localhost",
   user="root",
-  password="password",
+  password="nic",
   database="seeds"
 )
 
