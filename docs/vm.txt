@@ -1,0 +1,20 @@
+install mysql and python
+
+execute the following-
+sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 5000 -j ACCEPT
+sudo netfilter-persistent save
+
+execute DDL statements-
+
+CREATE DATABASE seeds;
+
+USE seeds;
+
+CREATE TABLE seed (
+    uuid VARCHAR(50),
+    lotNumber VARCHAR(50),
+    sampleSecretCode VARCHAR(50),
+    tagSeries VARCHAR(50),
+    tagStart INT,
+    tagEnd INT
+);
